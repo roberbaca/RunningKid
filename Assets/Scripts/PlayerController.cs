@@ -8,6 +8,8 @@ public class PlayerController : MonoBehaviour
     private const float LANE_DISTANCE = 3f;
     private const float TURN_SPEED = 0.05f;
 
+    private bool isRunning = false; // bandera para saber si el nivel comenzo
+
     // Animator
     private Animator anim;
 
@@ -19,10 +21,9 @@ public class PlayerController : MonoBehaviour
     private float verticalVelocity;
     public float speed = 7f;
     private int desiredLane = 1; // linea en la que se encuentra el personaje (0 = izquierda, 1 = centro, 2 = derecha)
-    private bool isGrounded;
+    private bool isGrounded = true;
 
  
-
 
     // Start is called before the first frame update
     void Start()
@@ -34,8 +35,12 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(!isRunning)
+        {
+            return;
+        }
 
-        // Input para saber en que linea esta el personaje
+        // Input por teclado
         if(Input.GetKeyDown(KeyCode.LeftArrow))
         {
             MoveLane(false);
@@ -45,6 +50,20 @@ public class PlayerController : MonoBehaviour
         {
             MoveLane(true);
         }
+
+
+        // Controles tactiles:
+
+        if (MobileInput.Instance.SwipeLeft)
+        {
+            MoveLane(false);
+        }
+
+        if (MobileInput.Instance.SwipeRight)
+        {
+            MoveLane(true);
+        }
+
 
         // definimos el target en funcion de la posicion actual
         Vector3 targetPosition = transform.position.z * Vector3.forward;
@@ -67,17 +86,24 @@ public class PlayerController : MonoBehaviour
 
         moveVector.x = (targetPosition - transform.position).normalized.x * speed;
 
+        IsGrounded();
 
-        isGrounded = IsGrounded();
+        anim.SetBool("IsGrounded", isGrounded);
 
-        anim.SetBool("Grounded", isGrounded);
-
+        // chequeamos si el personaje esta en el suelo
         if (isGrounded)
         {
             verticalVelocity = -0.1f;
         
 
             if (Input.GetKeyDown(KeyCode.Space))
+            {
+                anim.SetTrigger("Jump");
+                verticalVelocity = jumpForce; // jump
+            }
+
+            //controles tactiles
+            if (MobileInput.Instance.SwipeUp)
             {
                 anim.SetTrigger("Jump");
                 verticalVelocity = jumpForce; // jump
@@ -92,6 +118,13 @@ public class PlayerController : MonoBehaviour
             {
                 verticalVelocity = -jumpForce;
             }
+
+            // controles tactiles
+            if (MobileInput.Instance.SwipeDown)
+            {
+                verticalVelocity = -jumpForce;
+            }
+
         }
 
         moveVector.y = verticalVelocity;
@@ -143,7 +176,14 @@ public class PlayerController : MonoBehaviour
         Ray groundRay = new Ray(new Vector3(controller.bounds.center.x, controller.bounds.center.y - controller.bounds.extents.y + 0.2f, controller.bounds.center.z), Vector3.down);
         Debug.DrawRay(groundRay.origin, groundRay.direction, Color.red, 1f);
 
-        return (Physics.Raycast(groundRay, 0.2f + 0.1f));
+        isGrounded = Physics.Raycast(groundRay, 0.2f + 0.1f);
+
+        return isGrounded;
         
+    }
+
+    public void StartRunning()
+    {
+        isRunning = true;
     }
 }
