@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class GameManager : MonoBehaviour
 {
 
+    private const int COIN_SCORE_AMOUNT = 5;
     public static GameManager Instance { set; get; }
 
     private bool isGameStarted = false; // bandera para saber si el nivel comenzo
@@ -15,7 +16,9 @@ public class GameManager : MonoBehaviour
     // HUD
     public Text scoreText, coinText, modifierText;
 
-    public float score, coinScore, modifierScore;
+    public float modifierScore;
+
+    private int score, coinScore;
 
     private void Awake()
     {
@@ -48,12 +51,37 @@ public class GameManager : MonoBehaviour
             isGameStarted = true;
             controller.StartRunning();
         }
+
+        if (isGameStarted)
+        {
+            // Bump Score Up            
+            score += (int)(Time.deltaTime);
+            scoreText.text = score.ToString("0");
+        }
+
     }
+
 
     public void UpdateScores()
     {
-        scoreText.text = score.ToString();
+        
         coinText.text = coinScore.ToString();
         modifierText.text = modifierScore.ToString();
     }
+
+
+    /*MODIFIER SPEED*/
+    public void UpdateModifier(float modifierAmount)
+    {
+        modifierScore = 1f + modifierAmount;
+        UpdateScores();
+    }
+
+    public void GetCoin()
+    {
+        coinScore ++;
+        coinText.text = coinScore.ToString("0");
+        scoreText.text = score.ToString("0");
+    }
+
 }

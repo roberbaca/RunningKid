@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour
     private const float TURN_SPEED = 0.05f;
 
     private bool isRunning = false; // bandera para saber si el nivel comenzo
+    private bool isGrounded = true; // bandera para saber si el personaje esta en el piso
 
     // Animator
     private Animator anim;
@@ -18,12 +19,18 @@ public class PlayerController : MonoBehaviour
     private CharacterController controller;
     public float jumpForce = 4f;
     private float gravity = 12f;
-    private float verticalVelocity;
-    public float speed = 7f;
+    private float verticalVelocity;     
     private int desiredLane = 1; // linea en la que se encuentra el personaje (0 = izquierda, 1 = centro, 2 = derecha)
-    private bool isGrounded = true;
 
- 
+
+
+    // Speed Modifier
+    public float originalSpeed = 7f;
+    public float speed = 7f;
+    private float speedIncreaseLastTic;
+    private float speedIncreaseTime = 2.5f;
+    private float speedIncreaseAmount = 0.1f;
+
 
     // Start is called before the first frame update
     void Start()
@@ -38,6 +45,16 @@ public class PlayerController : MonoBehaviour
         if(!isRunning)
         {
             return;
+        }
+
+        /* MODIFIER SPEED*/
+
+        if(Time.time - speedIncreaseLastTic > speedIncreaseTime)
+        {
+            speedIncreaseLastTic = Time.time;
+            speed += speedIncreaseAmount;
+
+            GameManager.Instance.UpdateModifier(speed - originalSpeed);
         }
 
         // Input por teclado
@@ -102,12 +119,32 @@ public class PlayerController : MonoBehaviour
                 verticalVelocity = jumpForce; // jump
             }
 
+            else if (Input.GetKeyDown(KeyCode.LeftControl))
+            {
+                StartSliding(); // slide
+                Invoke("StopSliding", 1f);
+            }
+
+
+
             //controles tactiles
             if (MobileInput.Instance.SwipeUp)
             {
                 anim.SetTrigger("Jump");
                 verticalVelocity = jumpForce; // jump
             }
+
+            else if (MobileInput.Instance.SwipeDown)
+            {
+                StartSliding(); // slide
+                Invoke("StopSliding", 1f);
+            }
+
+
+
+
+
+
         }
         else
         {
@@ -185,5 +222,43 @@ public class PlayerController : MonoBehaviour
     public void StartRunning()
     {
         isRunning = true;
+        anim.SetTrigger("Running");
     }
+
+    public void StartSliding()
+    {
+        anim.SetBool("Sliding", true);
+
+        // al deslizar el personaje, modificar el collider. Disminuimos a la mitad la altura y el centro.
+        controller.height /= 2;
+        controller.center = new Vector3(controller.center.x, controller.center.y / 2, controller.center.z);
+
+    }
+
+    public void StopSliding()
+    {
+        anim.SetBool("Sliding", false);
+
+        // Volvemos a escalar el collider a las dimensiones originales
+        controller.height *= 2;
+        controller.center = new Vector3(controller.center.x, controller.center.y * 2, controller.center.z);
+    }
+
+    private void Crash()
+    {
+        // player dies
+        anim.SetTrigger("Death");
+        isRunning = false;
+    }
+
+    private void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        switch(hit.gameObject.tag)
+        {
+            case "Obstacle":
+                Crash();
+            break;
+        }
+    }
+
 }

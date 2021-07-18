@@ -10,7 +10,7 @@ public class CameraController : MonoBehaviour
 
     private void LateUpdate()
     {
-        Vector3 desiredPosition = lookAt.position + offset;
+        Vector3 desiredPosition = lookAt.position + offset/2;
         desiredPosition.x = 0;
         transform.position = Vector3.Lerp(transform.position, desiredPosition, Time.deltaTime);
     }
@@ -19,7 +19,7 @@ public class CameraController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        transform.position = lookAt.position + offset;
+        transform.position = lookAt.position + offset;        
     }
 
     // Update is called once per frame

@@ -1,0 +1,12 @@
+# Itizso (Itizso.itch.io)
+# CC BY-NC-ND 4.0
+
+newmtl SpelunkyTexture
+Ns 90.196078
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.013023 0.013023 0.013023
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd GuySpelunky.png
