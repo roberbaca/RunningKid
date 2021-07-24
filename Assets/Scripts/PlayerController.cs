@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
 
-    private const float LANE_DISTANCE = 3f;
+    private const float LANE_DISTANCE = 2.5f;
     private const float TURN_SPEED = 0.05f;
 
     private bool isRunning = false; // bandera para saber si el nivel comenzo
