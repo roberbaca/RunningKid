@@ -5,10 +5,11 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
 
-    private const float LANE_DISTANCE = 2.5f;
+    private const float LANE_DISTANCE = 2f;
     private const float TURN_SPEED = 0.05f;
 
     private bool isRunning = false; // bandera para saber si el nivel comenzo
+    private bool isSpinning = false; // bandera para saber si el nivel comenzo
     private bool isGrounded = true; // bandera para saber si el personaje esta en el piso
 
     // Animator
@@ -125,6 +126,12 @@ public class PlayerController : MonoBehaviour
                 Invoke("StopSliding", 1f);
             }
 
+            else if (Input.GetKeyDown(KeyCode.G))
+            {
+                StartSpinning(); // spinning
+                Invoke("StopSpinning", 1f);
+            }
+
 
 
             //controles tactiles
@@ -172,15 +179,20 @@ public class PlayerController : MonoBehaviour
         controller.Move(moveVector * Time.deltaTime);
 
         // Rotacion del personaje en el sentido de movimiento
-        Vector3 dir = controller.velocity;
-
-        if (dir != Vector3.zero)
+        if (!isSpinning)
         {
-            dir.y = 0;
-            transform.forward = Vector3.Lerp(transform.forward, dir, TURN_SPEED);
+            Vector3 dir = controller.velocity;
+
+            if (dir != Vector3.zero)
+            {
+                dir.y = 0;
+                transform.forward = Vector3.Lerp(transform.forward, dir, TURN_SPEED);
+            }
+
         }
 
-        
+
+
 
     }
 
@@ -244,21 +256,52 @@ public class PlayerController : MonoBehaviour
         controller.center = new Vector3(controller.center.x, controller.center.y * 2, controller.center.z);
     }
 
+
+
+    public void StartSpinning()
+    {
+        anim.SetBool("Spinning", true);
+        isSpinning = true;
+        
+
+    }
+
+    public void StopSpinning()
+    {
+        anim.SetBool("Spinning", false);
+        isSpinning = false;
+
+    }
+
+
+
+
+
+
+
+
+
     private void Crash()
     {
-        // player dies
+        // player dies        
         anim.SetTrigger("Death");
+        controller.height = 0;
+        controller.center = new Vector3(controller.center.x, controller.center.y, controller.center.z);
         isRunning = false;
     }
 
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
-        switch(hit.gameObject.tag)
+        if(isRunning)
         {
-            case "Obstacle":
-                Crash();
-            break;
+            switch (hit.gameObject.tag)
+            {
+                case "Obstacle":
+                    Crash();
+                    break;
+            }
         }
+        
     }
 
 }
