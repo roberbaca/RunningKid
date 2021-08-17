@@ -5,42 +5,34 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
 
-    private const float LANE_DISTANCE = 2f;
-    private const float TURN_SPEED = 0.05f;
-
-    private bool isRunning = false; // bandera para saber si el nivel comenzo
-    private bool isSpinning = false; // bandera para saber si el nivel comenzo
-    private bool isGrounded = true; // bandera para saber si el personaje esta en el piso
-
-    // Animator
+    private CharacterController controller;
     private Animator anim;
 
-
+    private bool isRunning = false;         // bandera para saber si el nivel comenzo
+    public bool isSpinning = false;        // bandera para saber si player esta atacando
+    private bool isGrounded = true;         // bandera para saber si player esta en el piso
+    
     // Movimiento
-    private CharacterController controller;
-    public float jumpForce = 4f;
-    private float gravity = 12f;
-    private float verticalVelocity;     
-    private int desiredLane = 1; // linea en la que se encuentra el personaje (0 = izquierda, 1 = centro, 2 = derecha)
+    private Vector3 direction;
+    private Vector3 targetPosition;
+    public float jumpForce = 4f;            // fuerza del salto
+    public float speed = 7f;                // velocidad de movimiento
+    private const float turnSpeed = 0.05f;   // velocidad de rotacion del player cuando se mueve entre lineas
 
 
-
-    // Speed Modifier
-    public float originalSpeed = 7f;
-    public float speed = 7f;
-    private float speedIncreaseLastTic;
-    private float speedIncreaseTime = 2.5f;
-    private float speedIncreaseAmount = 0.1f;
+    public float gravity = 12f;              // graveded
+    private float verticalVelocity;          // velocidad de caida
+    private int lane = 1;                    // linea en la que se encuentra el player (0 = izquierda, 1 = centro, 2 = derecha)
+    private const float laneDistance = 2f;   // ancho de cada linea por la que el personaje puede correr
 
 
-    // Start is called before the first frame update
     void Start()
     {
         controller = GetComponent<CharacterController>();
         anim = GetComponent<Animator>();
     }
 
-    // Update is called once per frame
+  
     void Update()
     {
         if(!isRunning)
@@ -48,18 +40,9 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
-        /* MODIFIER SPEED*/
-
-        if(Time.time - speedIncreaseLastTic > speedIncreaseTime)
-        {
-            speedIncreaseLastTic = Time.time;
-            speed += speedIncreaseAmount;
-
-            GameManager.Instance.UpdateModifier(speed - originalSpeed);
-        }
 
         // Input por teclado
-        if(Input.GetKeyDown(KeyCode.LeftArrow))
+        if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
             MoveLane(false);
         }
@@ -71,7 +54,6 @@ public class PlayerController : MonoBehaviour
 
 
         // Controles tactiles:
-
         if (MobileInput.Instance.SwipeLeft)
         {
             MoveLane(false);
@@ -84,57 +66,59 @@ public class PlayerController : MonoBehaviour
 
 
         // definimos el target en funcion de la posicion actual
-        Vector3 targetPosition = transform.position.z * Vector3.forward;
+        targetPosition = transform.position.z * Vector3.forward;
 
-        if (desiredLane == 0)
+        if (lane == 0) // si deseamos mover el player a la izquierda...
         {
-            targetPosition += Vector3.left * LANE_DISTANCE;
+            targetPosition += Vector3.left * laneDistance;
         }
-        else if (desiredLane == 2)
+        else if (lane == 2)  // si deseamos mover el player a la derecha...
         {
-            targetPosition += Vector3.right * LANE_DISTANCE;
+            targetPosition += Vector3.right * laneDistance;
         }
         else
         {
             // estamos en la linea del medio
         }
 
-        // calculo del vector de movimiento
-        Vector3 moveVector = Vector3.zero;
 
-        moveVector.x = (targetPosition - transform.position).normalized.x * speed;
+        
 
         IsGrounded();
-
         anim.SetBool("IsGrounded", isGrounded);
+
+        // calculo del vector de movimiento
+        direction = Vector3.zero;
+        //direction.x = (targetPosition - transform.position).normalized.x * speed;
+        direction.x = (targetPosition - transform.position).x * speed;
 
         // chequeamos si el personaje esta en el suelo
         if (isGrounded)
         {
-            verticalVelocity = -0.1f;
+            verticalVelocity = -0.1f; // para mantenerno pegados al suelo todo el tiempo
         
-
-            if (Input.GetKeyDown(KeyCode.Space))
+            if (Input.GetKeyDown(KeyCode.Space)) // jump
             {
                 anim.SetTrigger("Jump");
-                verticalVelocity = jumpForce; // jump
+                verticalVelocity = jumpForce; 
             }
 
-            else if (Input.GetKeyDown(KeyCode.LeftControl))
+            else if (Input.GetKeyDown(KeyCode.LeftControl)) // slide
             {
-                StartSliding(); // slide
+                StartSliding(); 
                 Invoke("StopSliding", 1f);
             }
 
-            else if (Input.GetKeyDown(KeyCode.G))
+            else if (Input.GetKeyDown(KeyCode.G)) // spin
             {
-                StartSpinning(); // spinning
+                StartSpinning(); 
                 Invoke("StopSpinning", 1f);
             }
 
+         
 
 
-            //controles tactiles
+                //controles tactiles
             if (MobileInput.Instance.SwipeUp)
             {
                 anim.SetTrigger("Jump");
@@ -147,17 +131,18 @@ public class PlayerController : MonoBehaviour
                 Invoke("StopSliding", 1f);
             }
 
-
-
-
-
+            else if (MobileInput.Instance.DoubleTap)
+            {
+                StartSpinning();
+                Invoke("StopSpinning", 1f);
+            }
 
         }
-        else
+        else // si no estamos en el suelo...
         {
             verticalVelocity -= (gravity * Time.deltaTime);
 
-            //fast falling
+            //fast falling. Podemos tocar el boton Space para caer mas rapido ???
             if(Input.GetKeyDown(KeyCode.Space))
             {
                 verticalVelocity = -jumpForce;
@@ -170,54 +155,67 @@ public class PlayerController : MonoBehaviour
             }
 
         }
+      
+        direction.y = verticalVelocity; // aplicamos gravedad
+        direction.z = speed;
 
-        moveVector.y = verticalVelocity;
-        moveVector.z = speed;
-
+        /*
+        if (isGrounded)
+        {
+           
+        }
+        else
+        {
+            direction.z = speed * 0.8f; // si estamos en el aire, avanzamos mas lento en el eje Z
+        }
+        */
 
         // movimiento del personaje
-        controller.Move(moveVector * Time.deltaTime);
+        controller.Move(direction * Time.deltaTime);
 
-        // Rotacion del personaje en el sentido de movimiento
+
+        // Rotacion del personaje en el sentido de movimiento. Para atacar y romper cajas...
         if (!isSpinning)
         {
-            Vector3 dir = controller.velocity;
+            Vector3 dir = controller.velocity; // giramos el personaje cuando cambiamos de linea
 
             if (dir != Vector3.zero)
             {
                 dir.y = 0;
-                transform.forward = Vector3.Lerp(transform.forward, dir, TURN_SPEED);
-            }
+                transform.forward = Vector3.Lerp(transform.forward, dir, turnSpeed);
 
+            }
         }
 
-
-
-
+     
     }
 
     private void MoveLane(bool goingRight)
     {
+
+        // si nos movemos a la izquierda...
         if(!goingRight)
         {
-            desiredLane--;
+            lane--;
 
-            if (desiredLane == -1)
+            if (lane == -1) // no nos podemos mover, ya estamos en el margen izquierdo
             {
-                desiredLane = 0;
+                lane = 0;
             }
         }
-        else
+        else // nos movemos a la derecha
         {
-            desiredLane++;
+            lane++;
 
-            if (desiredLane == 3)
+            if (lane == 3) // no nos podemos mover, ya estamos en el margen derecho
             {
-                desiredLane = 2;
+                lane = 2;
             }
         }
 
     }
+
+  
 
     private bool IsGrounded()
     {
@@ -225,12 +223,12 @@ public class PlayerController : MonoBehaviour
         Ray groundRay = new Ray(new Vector3(controller.bounds.center.x, controller.bounds.center.y - controller.bounds.extents.y + 0.2f, controller.bounds.center.z), Vector3.down);
         Debug.DrawRay(groundRay.origin, groundRay.direction, Color.red, 1f);
 
-        isGrounded = Physics.Raycast(groundRay, 0.2f + 0.1f);
+        isGrounded = Physics.Raycast(groundRay, 0.3f);        
 
-        return isGrounded;
-        
+        return isGrounded;        
     }
 
+    
     public void StartRunning()
     {
         isRunning = true;
@@ -241,9 +239,12 @@ public class PlayerController : MonoBehaviour
     {
         anim.SetBool("Sliding", true);
 
-        // al deslizar el personaje, modificar el collider. Disminuimos a la mitad la altura y el centro.
-        controller.height /= 2;
-        controller.center = new Vector3(controller.center.x, controller.center.y / 2, controller.center.z);
+        // al deslizar el personaje, modificamos el collider para no colisionar con objetos. Disminuimos a la mitad la altura y el centro.
+        //controller.height /= 2;
+        controller.height /= 3;
+        //controller.center = new Vector3(controller.center.x, controller.center.y / 2, controller.center.z);
+        controller.center = new Vector3(controller.center.x, controller.center.y / 7.5f, controller.center.z);
+
 
     }
 
@@ -251,9 +252,11 @@ public class PlayerController : MonoBehaviour
     {
         anim.SetBool("Sliding", false);
 
-        // Volvemos a escalar el collider a las dimensiones originales
-        controller.height *= 2;
-        controller.center = new Vector3(controller.center.x, controller.center.y * 2, controller.center.z);
+        // Volvemos a escalar el collider a las dimensiones originales...
+        //controller.height *= 2;
+        controller.height *= 3;
+        //controller.center = new Vector3(controller.center.x, controller.center.y * 2, controller.center.z);
+        controller.center = new Vector3(controller.center.x, controller.center.y * 7.5f, controller.center.z);
     }
 
 
@@ -262,36 +265,35 @@ public class PlayerController : MonoBehaviour
     {
         anim.SetBool("Spinning", true);
         isSpinning = true;
-        
-
     }
 
     public void StopSpinning()
     {
         anim.SetBool("Spinning", false);
         isSpinning = false;
-
     }
 
 
-
-
-
-
-
-
-
-    private void Crash()
+    public void Crash()
     {
         // player dies        
         anim.SetTrigger("Death");
         controller.height = 0;
         controller.center = new Vector3(controller.center.x, controller.center.y, controller.center.z);
         isRunning = false;
+        //GameManager.Instance.isDead = true;
+        GameManager.Instance.OnGameOver();
+    }
+
+
+    public void DisableCollisions()
+    {
+        controller.detectCollisions = false;        
     }
 
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
+       
         if(isRunning)
         {
             switch (hit.gameObject.tag)
@@ -299,9 +301,14 @@ public class PlayerController : MonoBehaviour
                 case "Obstacle":
                     Crash();
                     break;
+                case "FracturedBox":
+                    //DisableCollisions();
+                    break;              
             }
         }
-        
+
+       
+
     }
 
 }

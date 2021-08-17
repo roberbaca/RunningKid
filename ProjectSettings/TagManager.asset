@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Obstacle
   - Coin
+  - Box
+  - FracturedBox
   layers:
   - Default
   - TransparentFX
