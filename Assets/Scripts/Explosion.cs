@@ -4,29 +4,17 @@ using UnityEngine;
 
 public class Explosion : MonoBehaviour
 {
-    
-    private MeshCollider meshCol;
-    private Rigidbody rb;
+  
+    // Destruimos el objeto transcurrido unos segundos
 
     void Start()
-    {
-        meshCol = GetComponent<MeshCollider>();
-        rb = GetComponent<Rigidbody>();
-        StartCoroutine("DisableColliders");
-        StartCoroutine("OnDestroyObject");
-      
-    }
-
-    IEnumerator DisableColliders()
-    {
-        yield return new WaitForSeconds(0.1f);
-        meshCol.enabled = false;
-        rb.detectCollisions = false;            
+    {        
+        StartCoroutine("OnDestroyObject");      
     }
 
     IEnumerator OnDestroyObject()
     {
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(1f);
         Destroy(this.gameObject);
     }
 

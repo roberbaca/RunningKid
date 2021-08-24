@@ -41,28 +41,33 @@ public class PlayerController : MonoBehaviour
         }
 
 
-        // Input por teclado
-        if (Input.GetKeyDown(KeyCode.LeftArrow))
-        {
-            MoveLane(false);
-        }
+        if(isGrounded) // solo nos podemos mover de carril si estamos en el piso
+        {  
+            // Input por teclado
+            if (Input.GetKeyDown(KeyCode.LeftArrow))
+            {
+                MoveLane(false);
+            }
 
-        if (Input.GetKeyDown(KeyCode.RightArrow))
-        {
-            MoveLane(true);
-        }
+            if (Input.GetKeyDown(KeyCode.RightArrow))
+            {
+                MoveLane(true);
+            }
 
 
-        // Controles tactiles:
-        if (MobileInput.Instance.SwipeLeft)
-        {
-            MoveLane(false);
-        }
+            // Controles tactiles:
+            if (MobileInput.Instance.SwipeLeft)
+            {
+                MoveLane(false);
+            }
 
-        if (MobileInput.Instance.SwipeRight)
-        {
-            MoveLane(true);
+            if (MobileInput.Instance.SwipeRight)
+            {
+                MoveLane(true);
+            }
+
         }
+    
 
 
         // definimos el target en funcion de la posicion actual
@@ -240,10 +245,11 @@ public class PlayerController : MonoBehaviour
         anim.SetBool("Sliding", true);
 
         // al deslizar el personaje, modificamos el collider para no colisionar con objetos. Disminuimos a la mitad la altura y el centro.
-        //controller.height /= 2;
-        controller.height /= 3;
-        //controller.center = new Vector3(controller.center.x, controller.center.y / 2, controller.center.z);
-        controller.center = new Vector3(controller.center.x, controller.center.y / 7.5f, controller.center.z);
+    
+        controller.height /= 2;
+        controller.center = new Vector3(controller.center.x, controller.center.y / 2, controller.center.z);
+        
+    
 
 
     }
@@ -253,10 +259,9 @@ public class PlayerController : MonoBehaviour
         anim.SetBool("Sliding", false);
 
         // Volvemos a escalar el collider a las dimensiones originales...
-        //controller.height *= 2;
-        controller.height *= 3;
-        //controller.center = new Vector3(controller.center.x, controller.center.y * 2, controller.center.z);
-        controller.center = new Vector3(controller.center.x, controller.center.y * 7.5f, controller.center.z);
+ 
+        controller.height *= 2;       
+        controller.center = new Vector3(controller.center.x, controller.center.y * 2f, controller.center.z);
     }
 
 
@@ -294,18 +299,19 @@ public class PlayerController : MonoBehaviour
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
        
-        if(isRunning)
-        {
+       
             switch (hit.gameObject.tag)
             {
                 case "Obstacle":
                     Crash();
                     break;
-                case "FracturedBox":
-                    //DisableCollisions();
+                case "Box":
+                Physics.IgnoreCollision(controller.GetComponent<Collider>(), hit.gameObject.GetComponent<Collider>());
+                    //DisableCollisions();                    
                     break;              
             }
-        }
+       
+
 
        
 

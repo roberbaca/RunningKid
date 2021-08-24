@@ -30,13 +30,16 @@ public class CameraController : MonoBehaviour
             return;
         }
 
-        
+        if (!GameManager.Instance.isDead)
+        {
+            Vector3 desiredPosition = lookAt.position + offset;
+            desiredPosition.x = 0;
+
+            transform.position = Vector3.Lerp(transform.position, desiredPosition, Time.deltaTime);
+            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(rotation), 0.1f);
+        }
         //Vector3 desiredPosition = lookAt.position + offset / 2;
-        Vector3 desiredPosition = lookAt.position + offset;
-        desiredPosition.x = 0;
         
-        transform.position = Vector3.Lerp(transform.position, desiredPosition, Time.deltaTime);
-        transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(rotation),0.1f);
     }
 
 }

@@ -96,7 +96,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 189cd6888fe00144d9f4bdf670963314, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fracturedCrate: {fileID: 5964350897722862655, guid: 998ea4284f7ed2d4b86456693fca41e1, type: 3}
+  fracturedCrate: {fileID: 1138316432384492260, guid: 2e9a052c6a2795f42a30598e54d7aa7d, type: 3}
 --- !u!65 &6796207749212694023
 BoxCollider:
   m_ObjectHideFlags: 0
