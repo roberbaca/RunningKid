@@ -162,18 +162,7 @@ public class PlayerController : MonoBehaviour
         }
       
         direction.y = verticalVelocity; // aplicamos gravedad
-        direction.z = speed;
-
-        /*
-        if (isGrounded)
-        {
-           
-        }
-        else
-        {
-            direction.z = speed * 0.8f; // si estamos en el aire, avanzamos mas lento en el eje Z
-        }
-        */
+        direction.z = speed;      
 
         // movimiento del personaje
         controller.Move(direction * Time.deltaTime);
@@ -224,13 +213,15 @@ public class PlayerController : MonoBehaviour
 
     private bool IsGrounded()
     {
+
         // casting a ray
         Ray groundRay = new Ray(new Vector3(controller.bounds.center.x, controller.bounds.center.y - controller.bounds.extents.y + 0.2f, controller.bounds.center.z), Vector3.down);
         Debug.DrawRay(groundRay.origin, groundRay.direction, Color.red, 1f);
 
         isGrounded = Physics.Raycast(groundRay, 0.3f);        
 
-        return isGrounded;        
+        return isGrounded;             
+        
     }
 
     
@@ -248,10 +239,6 @@ public class PlayerController : MonoBehaviour
     
         controller.height /= 2;
         controller.center = new Vector3(controller.center.x, controller.center.y / 2, controller.center.z);
-        
-    
-
-
     }
 
     public void StopSliding()
@@ -289,12 +276,7 @@ public class PlayerController : MonoBehaviour
         //GameManager.Instance.isDead = true;
         GameManager.Instance.OnGameOver();
     }
-
-
-    public void DisableCollisions()
-    {
-        controller.detectCollisions = false;        
-    }
+  
 
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
@@ -306,8 +288,8 @@ public class PlayerController : MonoBehaviour
                     Crash();
                     break;
                 case "Box":
-                Physics.IgnoreCollision(controller.GetComponent<Collider>(), hit.gameObject.GetComponent<Collider>());
-                    //DisableCollisions();                    
+                //Physics.IgnoreCollision(controller.GetComponent<Collider>(), hit.gameObject.GetComponent<Collider>());
+                               
                     break;              
             }
        

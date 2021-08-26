@@ -139,10 +139,7 @@ public class GameManager : MonoBehaviour
     public void OnResumeGame()
     {
         pauseMenuAnim.SetTrigger("Resume");
-        Time.timeScale = 1 ;
-        
-        //pauseMenu.SetActive(false);
-        
+        Time.timeScale = 1 ;     
         
     }
 }
