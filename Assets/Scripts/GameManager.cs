@@ -7,7 +7,7 @@ using TMPro;
 public class GameManager : MonoBehaviour
 {
 
-    private const int COIN_SCORE_AMOUNT = 5;
+    //private const int COIN_SCORE_AMOUNT = 5;
     public static GameManager Instance { set; get; }
 
     public bool isGameStarted = false; // bandera para saber si el nivel comenzo
@@ -16,7 +16,8 @@ public class GameManager : MonoBehaviour
 
     // HUD
     public Animator gameCanvas, coinAnim;         
-    private int score, coinScore;
+    private int coinScore;
+    public TextMeshProUGUI sectionCountText;
     public GameObject HUDMenu;
 
     // Main Menu
@@ -31,6 +32,10 @@ public class GameManager : MonoBehaviour
     public Animator pauseMenuAnim;
     public GameObject pauseMenu;
 
+
+    // Sky
+    public GameObject sky;
+    public float dayNightCycleSpeed = 0.1f;
 
     private void Awake()
     {
@@ -57,8 +62,7 @@ public class GameManager : MonoBehaviour
         {
             isGameStarted = true;
             controller.StartRunning();
-            FindObjectOfType<CameraController>().isMoving = true;
-            //gameCanvas.SetTrigger("Show");
+            FindObjectOfType<CameraController>().isMoving = true;         
             mainMenuAnim.SetTrigger("Hide");
             HUDMenu.SetActive(true);
         }
@@ -67,8 +71,7 @@ public class GameManager : MonoBehaviour
         {
             isGameStarted = true;
             controller.StartRunning();
-            FindObjectOfType<CameraController>().isMoving = true;
-            //gameCanvas.SetTrigger("Show");
+            FindObjectOfType<CameraController>().isMoving = true;          
             mainMenuAnim.SetTrigger("Hide");
             HUDMenu.SetActive(true);
         }
@@ -76,8 +79,8 @@ public class GameManager : MonoBehaviour
         if (isGameStarted)
         {
             // Bump Score Up            
-            score += (int)(Time.deltaTime); // DESACTIVAR !!!
-            //scoreText.text = score.ToString("0");
+            
+            
         }
 
         if(Input.GetKeyDown(KeyCode.P))
@@ -85,7 +88,10 @@ public class GameManager : MonoBehaviour
             OnPauseGame();
         }
 
-        
+        // Ciclo dia/noche
+
+        sky.GetComponent<Renderer>().material.mainTextureOffset = new Vector2(dayNightCycleSpeed * Time.time, 0);
+        sky.GetComponent<Transform>().Rotate(Vector3.up * Time.deltaTime * 5);
 
     }
 
@@ -139,7 +145,8 @@ public class GameManager : MonoBehaviour
     public void OnResumeGame()
     {
         pauseMenuAnim.SetTrigger("Resume");
-        Time.timeScale = 1 ;     
-        
+        Time.timeScale = 1 ;             
     }
+
+    
 }

@@ -6,15 +6,15 @@ public class BoxFracture : MonoBehaviour
 {
    
     public GameObject fracturedCrate; 
-
    
     private void OnTriggerEnter(Collider other)
     {
+
+        // Buscamos al jugador, si esta en la animacion "spinning", entonces destruimos la caja
         if (other.gameObject.name == "Player")
         {      
             if (other.GetComponent<PlayerController>().isSpinning)
             {
-
                 explode();                
             }
             else
