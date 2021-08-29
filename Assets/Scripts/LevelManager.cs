@@ -38,6 +38,12 @@ public class LevelManager : MonoBehaviour
         }
 
         slider.value = playerTransform.position.z; // movemos el slider a medida que el personaje avanza por el nivel
+
+        if (sectionCount == maxNumberSections)
+        {
+            GameManager.Instance.OnLevelCompleted();
+            sectionCount = 0;
+        }
     }
 
     public void SpawnSection(int index)

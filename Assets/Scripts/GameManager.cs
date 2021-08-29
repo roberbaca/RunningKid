@@ -32,6 +32,16 @@ public class GameManager : MonoBehaviour
     public Animator pauseMenuAnim;
     public GameObject pauseMenu;
 
+    // Level Completed Menu
+    public TextMeshProUGUI levelCompletedCoinText;
+    public Animator levelCompletedAnim;
+    public GameObject levelCompletedMenu;
+    
+
+    // Level Finished Menu      
+    public GameObject levelFinished;
+    public Animator levelFinishedAnim;
+
 
     // Sky
     public GameObject sky;
@@ -74,14 +84,7 @@ public class GameManager : MonoBehaviour
             FindObjectOfType<CameraController>().isMoving = true;          
             mainMenuAnim.SetTrigger("Hide");
             HUDMenu.SetActive(true);
-        }
-
-        if (isGameStarted)
-        {
-            // Bump Score Up            
-            
-            
-        }
+        }      
 
         if(Input.GetKeyDown(KeyCode.P))
         {
@@ -118,7 +121,6 @@ public class GameManager : MonoBehaviour
 
     public void OnGameOver()
     {
-
         isDead = true;
         //gameOverScoreText.text = score.ToString("0");
         gameOverMenu.SetActive(true);
@@ -138,9 +140,10 @@ public class GameManager : MonoBehaviour
         pauseMenu.SetActive(true);
         gameOverMenu.SetActive(false);
         pauseMenuAnim.SetTrigger("Pause");
-        Time.timeScale = 0;                    
-        
+        Time.timeScale = 0;   
     }
+
+
 
     public void OnResumeGame()
     {
@@ -148,5 +151,27 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1 ;             
     }
 
-    
+
+    public void OnLevelCompleted()
+    {
+        controller.StopRunning();
+        isDead = true;
+        pauseMenu.SetActive(false);
+
+        levelFinished.SetActive(true);
+        levelFinishedAnim.SetTrigger("Show");
+
+        levelCompletedMenu.SetActive(true);         
+        levelCompletedCoinText.text = coinScore.ToString("0");
+        levelCompletedAnim.SetTrigger("LevelCompleted");
+    }
+
+
+    public void CloseApp()
+    {
+        Application.Quit();
+    }
+
+
+
 }

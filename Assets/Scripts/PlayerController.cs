@@ -9,7 +9,7 @@ public class PlayerController : MonoBehaviour
     private Animator anim;
 
     private bool isRunning = false;         // bandera para saber si el nivel comenzo
-    public bool isSpinning = false;        // bandera para saber si player esta atacando
+    public bool isSpinning = false;         // bandera para saber si player esta atacando
     private bool isGrounded = true;         // bandera para saber si player esta en el piso
     
     // Movimiento
@@ -121,8 +121,6 @@ public class PlayerController : MonoBehaviour
             }
 
          
-
-
                 //controles tactiles
             if (MobileInput.Instance.SwipeUp)
             {
@@ -231,6 +229,13 @@ public class PlayerController : MonoBehaviour
         anim.SetTrigger("Running");
     }
 
+    public void StopRunning()
+    {
+        isRunning = false;
+        anim.SetTrigger("Victory");
+    }
+
+
     public void StartSliding()
     {
         anim.SetBool("Sliding", true);
@@ -250,8 +255,6 @@ public class PlayerController : MonoBehaviour
         controller.height *= 2;       
         controller.center = new Vector3(controller.center.x, controller.center.y * 2f, controller.center.z);
     }
-
-
 
     public void StartSpinning()
     {
@@ -279,24 +282,12 @@ public class PlayerController : MonoBehaviour
   
 
     private void OnControllerColliderHit(ControllerColliderHit hit)
-    {
-       
-       
-            switch (hit.gameObject.tag)
-            {
-                case "Obstacle":
-                    Crash();
-                    break;
-                case "Box":
-                //Physics.IgnoreCollision(controller.GetComponent<Collider>(), hit.gameObject.GetComponent<Collider>());
-                               
-                    break;              
-            }
-       
-
-
-       
-
-    }
-
+    {    
+        switch (hit.gameObject.tag)
+        {
+            case "Obstacle":
+                Crash();
+            break;               
+        }
+    } 
 }
