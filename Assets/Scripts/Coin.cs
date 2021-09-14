@@ -5,6 +5,7 @@ using UnityEngine;
 public class Coin : MonoBehaviour
 {
     private Animator anim;
+    public AudioSource coinFX;
 
     private void Start()
     {
@@ -15,9 +16,11 @@ public class Coin : MonoBehaviour
     {
         if (other.tag == "Player")
         {
+            coinFX.Play();
             GameManager.Instance.GetCoin();
             anim.SetTrigger("Collected");
-            Destroy(gameObject, 1.2f);        }
+            Destroy(gameObject, 1.2f);        
+        }
         
     }
 }

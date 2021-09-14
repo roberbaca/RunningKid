@@ -15,7 +15,7 @@ public class LevelManager : MonoBehaviour
     private int sectionCount = 0;                                      // conteo de la secciones generadas
     public int maxNumberSections;                                      // es una medida de la longitud del nivel
     [SerializeField] Slider slider;                                    // progress bar
-        
+    public GameObject endSection;                                      // ultima seccion del nivel
 
     void Start()
     {
@@ -33,12 +33,23 @@ public class LevelManager : MonoBehaviour
     {
         if ((playerTransform.position.z - safeZone) > (zSpawn - numberOfVisibleSections * sectionLenght))
         {
-            SpawnSection(Random.Range(0, sectionPrefabs.Length));           
+            if (sectionCount < (maxNumberSections - numberOfVisibleSections))
+            {
+                SpawnSection(Random.Range(0, sectionPrefabs.Length));
+            }
+            else
+            {
+                // si llegamos al final del nivel, instanciamos una seccion especial
+                SpawnEndSection();
+            }
+            
             DeleteSection();
         }
 
         slider.value = playerTransform.position.z; // movemos el slider a medida que el personaje avanza por el nivel
 
+
+        // Completamos el nivel cuando alcanzamos la ultima seccion
         if (sectionCount == maxNumberSections)
         {
             GameManager.Instance.OnLevelCompleted();
@@ -59,5 +70,16 @@ public class LevelManager : MonoBehaviour
     {
         Destroy(activeSections[0]); // destruimos el primer elemento de la lista
         activeSections.RemoveAt(0); // sacamos el primer elemento de la lista        
-    }   
+    }
+
+    public void SpawnEndSection()
+    {
+        GameObject newSection = Instantiate(endSection, transform.forward * zSpawn, transform.rotation);
+        activeSections.Add(newSection); // agregamos un nuevo item al array de secciones
+        zSpawn += sectionLenght;
+        sectionCount++;
+        GameManager.Instance.sectionCountText.text = sectionCount.ToString("0");    // para debug
+    }
+
+
 }

@@ -5,12 +5,13 @@ using UnityEngine;
 public class BoxFracture : MonoBehaviour
 {
    
-    public GameObject fracturedCrate; 
+    public GameObject fracturedCrate;
+    public AudioSource boxDestroyFX;
    
     private void OnTriggerEnter(Collider other)
     {
 
-        // Buscamos al jugador, si esta en la animacion "spinning", entonces destruimos la caja
+        // Chequeamos colicion con el jugador, si esta en la animacion "spinning", entonces destruimos la caja
         if (other.gameObject.name == "Player")
         {      
             if (other.GetComponent<PlayerController>().isSpinning)
@@ -26,9 +27,8 @@ public class BoxFracture : MonoBehaviour
 
     public void explode()
     {
-        //make object disappear      
-        Instantiate(fracturedCrate, transform.position, transform.rotation);        
+        boxDestroyFX.Play();
+        Instantiate(fracturedCrate, transform.position, transform.rotation);        // instanciamos el objeto que contiene la animacion de destruccion
         Destroy(this.gameObject);
-
     }
 }
