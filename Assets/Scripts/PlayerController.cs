@@ -28,7 +28,12 @@ public class PlayerController : MonoBehaviour
 
     private Vector3 rotation;
 
-    public AudioSource spinFX;
+
+    // Sound SFX
+    public AudioSource spinSFX;
+    public AudioSource woahSFX;
+    public AudioSource jumpSFX;
+    public AudioSource whooshSFX;
 
     void Start()
     {
@@ -106,14 +111,17 @@ public class PlayerController : MonoBehaviour
         {
             verticalVelocity = -0.1f; // para mantenerno pegados al suelo todo el tiempo
         
+            // Controles por teclado
             if (Input.GetKeyDown(KeyCode.Space)) // jump
             {
+                jumpSFX.Play();
                 anim.SetTrigger("Jump");
                 verticalVelocity = jumpForce; 
             }
 
             else if (Input.GetKeyDown(KeyCode.LeftControl)) // slide
             {
+                
                 StartSliding(); 
                 Invoke("StopSliding", 1f);
             }
@@ -125,15 +133,16 @@ public class PlayerController : MonoBehaviour
             }
 
          
-                //controles tactiles
+            //controles tactiles
             if (MobileInput.Instance.SwipeUp)
             {
+                jumpSFX.Play();
                 anim.SetTrigger("Jump");
                 verticalVelocity = jumpForce; // jump
             }
 
             else if (MobileInput.Instance.SwipeDown)
-            {
+            {               
                 StartSliding(); // slide
                 Invoke("StopSliding", 1f);
             }
@@ -253,6 +262,7 @@ public class PlayerController : MonoBehaviour
     public void StartSliding()
     {
         anim.SetBool("Sliding", true);
+        whooshSFX.Play();
 
         // al deslizar el personaje, modificamos el collider para no colisionar con objetos. Disminuimos a la mitad la altura y el centro.    
         controller.height /= 2;
@@ -270,7 +280,7 @@ public class PlayerController : MonoBehaviour
 
     public void StartSpinning()
     {
-        spinFX.Play();
+        spinSFX.Play();
         anim.SetBool("Spinning", true);
         isSpinning = true;
     }
@@ -285,6 +295,7 @@ public class PlayerController : MonoBehaviour
     public void Crash()
     {
         // player dies        
+        woahSFX.Play();
         anim.SetTrigger("Death");
         controller.height = 0;
         controller.center = new Vector3(controller.center.x, controller.center.y, controller.center.z);

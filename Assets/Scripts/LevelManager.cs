@@ -17,6 +17,8 @@ public class LevelManager : MonoBehaviour
     [SerializeField] Slider slider;                                    // progress bar
     public GameObject endSection;                                      // ultima seccion del nivel
 
+    public CurveController curved;
+
     void Start()
     {
         for(int i = 0; i < numberOfVisibleSections; i++)
@@ -55,6 +57,18 @@ public class LevelManager : MonoBehaviour
             GameManager.Instance.OnLevelCompleted();
             sectionCount = 0;
         }
+
+
+        // en forma aleatoria genero curvas a la izquierda y derecha
+        if (sectionCount > 1 && sectionCount < 3)
+        {
+            curved.curvedLeft();
+        }
+
+        if (sectionCount > 3 )
+        {
+            curved.curvedRight();
+        }
     }
 
     public void SpawnSection(int index)
@@ -64,6 +78,7 @@ public class LevelManager : MonoBehaviour
         zSpawn += sectionLenght;
         sectionCount++;        
         GameManager.Instance.sectionCountText.text = sectionCount.ToString("0");    // para debug
+        Debug.Log(sectionCount);
     }
 
     private void DeleteSection()

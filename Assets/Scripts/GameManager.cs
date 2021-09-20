@@ -15,7 +15,7 @@ public class GameManager : MonoBehaviour
     public bool isGamePaused = false;
     private PlayerController controller;
 
-    // FX
+    // SFX
     public AudioSource clickFX;
 
 
@@ -84,8 +84,10 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+       
         pauseMenu.SetActive(false);
-        gameOverMenu.SetActive(false);
+        gameOverMenu.SetActive(false);        
+        
     }
 
     // Update is called once per frame
@@ -141,8 +143,10 @@ public class GameManager : MonoBehaviour
 
     public void OnPlayButton()
     {
+        music.Stop();
         clickFX.Play();
         UnityEngine.SceneManagement.SceneManager.LoadScene("Game");
+        
     }
 
 
@@ -153,7 +157,7 @@ public class GameManager : MonoBehaviour
     */
 
     public void OnGameOver()
-    {
+    {        
         isDead = true;  
         gameOverMenu.SetActive(true);
         pauseButton.SetActive(false);
@@ -195,7 +199,6 @@ public class GameManager : MonoBehaviour
         pauseMenuAnim.SetTrigger("Resume");
         Time.timeScale = 1 ;
         pauseButton.SetActive(true);
-
     }
 
 
@@ -209,9 +212,11 @@ public class GameManager : MonoBehaviour
     public void OnLevelCompleted()
     {
 
-        music.volume = 0.1f;
+        //music.volume = 0.1f;
 
-        victoryFX.Play();
+        music.Stop();
+        victoryFX.Play();      
+
         controller.StopRunning();
         isDead = true;
      
@@ -240,6 +245,7 @@ public class GameManager : MonoBehaviour
 
     public void OnStartGame()
     {
+        clickFX.Play();
         isGameStarted = true;
         controller.StartRunning();
         FindObjectOfType<CameraController>().isMoving = true;

@@ -32,19 +32,21 @@ using System.Collections;
 public class CurveController : MonoBehaviour
 {
 
+    public static CurveController Instance { set; get; }
+
     public Transform CurveOrigin;
 
     [Range(-500f, 500f)]
     [SerializeField]
-    float x = 0f;
+    public float x = 0f;
 
     [Range(-500f, 500f)]
     [SerializeField]
-    float y = 0f;
+    public float y = 0f;
 
     [Range(0f, 50f)]
     [SerializeField]
-    float falloff = 0f;
+    public float falloff = 0f;
 
     private Vector2 bendAmount = Vector2.zero;
 
@@ -68,6 +70,27 @@ public class CurveController : MonoBehaviour
         Shader.SetGlobalVector(bendAmountId, bendAmount);
         Shader.SetGlobalVector(bendOriginId, CurveOrigin.position);
         Shader.SetGlobalFloat(bendFalloffId, falloff);
+    }
+
+    public void curvedLeft()
+    {
+        if (x >= -25f)
+        {
+            x -= 5f * Time.deltaTime;
+        }
+        
+        //x = Mathf.Lerp(x, -10f, 0.1f);
+    }
+
+    public void curvedRight()
+    {
+        if (x <= 25f)
+        {
+            x += 5f * Time.deltaTime;
+        }
+       
+
+        //x = Mathf.Lerp(x, 10f, 0.1f);
     }
 
 }
