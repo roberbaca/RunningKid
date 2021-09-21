@@ -114,9 +114,10 @@ public class PlayerController : MonoBehaviour
             // Controles por teclado
             if (Input.GetKeyDown(KeyCode.Space)) // jump
             {
-                jumpSFX.Play();
-                anim.SetTrigger("Jump");
-                verticalVelocity = jumpForce; 
+                //jumpSFX.Play();
+                //anim.SetTrigger("Jump");
+                //verticalVelocity = jumpForce; 
+                Jump();
             }
 
             else if (Input.GetKeyDown(KeyCode.LeftControl)) // slide
@@ -136,9 +137,7 @@ public class PlayerController : MonoBehaviour
             //controles tactiles
             if (MobileInput.Instance.SwipeUp)
             {
-                jumpSFX.Play();
-                anim.SetTrigger("Jump");
-                verticalVelocity = jumpForce; // jump
+                Jump();
             }
 
             else if (MobileInput.Instance.SwipeDown)
@@ -157,28 +156,15 @@ public class PlayerController : MonoBehaviour
         else // si no estamos en el suelo...
         {
             verticalVelocity -= (gravity * Time.deltaTime);
-
-            //fast falling. Podemos tocar el boton Space para caer mas rapido ???
-            //if(Input.GetKeyDown(KeyCode.Space))
-            //{
-            //    verticalVelocity = -jumpForce;
-            //}
-
-            //// controles tactiles
-            //if (MobileInput.Instance.SwipeDown)
-            //{
-            //    verticalVelocity = -jumpForce;
-            //}
-
         }
-      
-        direction.y = verticalVelocity; // aplicamos gravedad
+
+        // aplicamos gravedad
+        direction.y = verticalVelocity; 
         direction.z = speed;      
 
         // movimiento del personaje
         controller.Move(direction * Time.deltaTime);
-
-        dir = controller.velocity; // giramos el personaje cuando cambiamos de linea
+        dir = controller.velocity; 
        
 
 
@@ -245,7 +231,13 @@ public class PlayerController : MonoBehaviour
         
     }
 
-    
+    public void Jump()
+    {
+        jumpSFX.Play();
+        anim.SetTrigger("Jump");
+        verticalVelocity = jumpForce;
+    }
+
     public void StartRunning()
     {
         isRunning = true;    

@@ -5,7 +5,6 @@ using UnityEngine;
 public class Coin : MonoBehaviour
 {
     private Animator anim;
-    public AudioSource coinFX;
 
     private void Start()
     {
@@ -15,12 +14,10 @@ public class Coin : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if (other.tag == "Player")
-        {
-            coinFX.Play();
-            GameManager.Instance.GetCoin();
+        {          
+            GameManager.Instance.GetCoin(1);
             anim.SetTrigger("Collected");
             Destroy(gameObject, 1.2f);        
-        }
-        
+        }        
     }
 }

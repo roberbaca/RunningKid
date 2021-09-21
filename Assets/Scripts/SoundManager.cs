@@ -5,7 +5,6 @@ using UnityEngine.UI;
 
 public class SoundManager : MonoBehaviour
 {
-
     public static SoundManager Instance { set; get; }
 
     private bool mutedSFX = false;
@@ -36,11 +35,7 @@ public class SoundManager : MonoBehaviour
         else
         {
             LoadMusicPref();
-        }
-
-
-        //musicToggle.isOn = true;
-        //mutedMusic = false;
+        }   
 
         if (!mutedMusic)
         {
@@ -63,12 +58,7 @@ public class SoundManager : MonoBehaviour
 
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-       
-    }
-
+ 
     public void OnMusicPress()
     {
         if (!mutedMusic)
@@ -98,8 +88,7 @@ public class SoundManager : MonoBehaviour
             for (int i = 0; i< sfx.Length; i++)
             {
                 sfx[i].volume = 0;
-            }
-           
+            }           
 
         }
         else
@@ -130,8 +119,7 @@ public class SoundManager : MonoBehaviour
 
     private void LoadSFXPref()
     {     
-        mutedSFX = PlayerPrefs.GetInt("mutedSFX") == 1;
-  
+        mutedSFX = PlayerPrefs.GetInt("mutedSFX") == 1;  
     }
 
     private void SaveSFXPref()

@@ -2330,7 +2330,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9156409347015619297, guid: 28aa6cbcc945c864ea4e77108c3f42ce, type: 3}
       propertyPath: m_RootOrder
-      value: 4
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 9156409347015619297, guid: 28aa6cbcc945c864ea4e77108c3f42ce, type: 3}
       propertyPath: m_LocalPosition.x
@@ -3664,7 +3664,7 @@ GameObject:
   - component: {fileID: 270169233}
   - component: {fileID: 270169234}
   m_Layer: 0
-  m_Name: ClickFX
+  m_Name: ClickSFX
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4370,6 +4370,7 @@ Transform:
   - {fileID: 1200527685}
   - {fileID: 270169233}
   - {fileID: 1705949670}
+  - {fileID: 1383775787}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -4388,11 +4389,13 @@ MonoBehaviour:
   isGameStarted: 0
   isDead: 0
   isGamePaused: 0
-  clickFX: {fileID: 270169234}
+  sectionCountText: {fileID: 1179563392}
+  clickSFX: {fileID: 270169234}
+  coinSFX: {fileID: 1463263051}
+  multipleCoinsSFX: {fileID: 1383775788}
   music: {fileID: 1417666718}
   gameCanvas: {fileID: 1090550067}
   coinAnim: {fileID: 244782132}
-  sectionCountText: {fileID: 1179563392}
   HUDMenu: {fileID: 1090550065}
   mainMenuAnim: {fileID: 630032744}
   mainMenu: {fileID: 630032742}
@@ -4760,6 +4763,8 @@ MonoBehaviour:
   - {fileID: 1200527684}
   - {fileID: 270169234}
   - {fileID: 1819199197}
+  - {fileID: 1383775788}
+  - {fileID: 1705949671}
   music: {fileID: 1417666718}
   musicToggle: {fileID: 1523538087}
 --- !u!4 &357477489
@@ -21732,7 +21737,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9156409347015619297, guid: 28aa6cbcc945c864ea4e77108c3f42ce, type: 3}
       propertyPath: m_RootOrder
-      value: 5
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 9156409347015619297, guid: 28aa6cbcc945c864ea4e77108c3f42ce, type: 3}
       propertyPath: m_LocalPosition.x
@@ -23438,7 +23443,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9156409347015619297, guid: 28aa6cbcc945c864ea4e77108c3f42ce, type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9156409347015619297, guid: 28aa6cbcc945c864ea4e77108c3f42ce, type: 3}
       propertyPath: m_LocalPosition.x
@@ -24139,11 +24144,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: bb8493faf3c5651428c1f678a1d5c0bb, type: 3}
   m_PrefabInstance: {fileID: 1059703902}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &1060161884 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 9156409347015619297, guid: 28aa6cbcc945c864ea4e77108c3f42ce, type: 3}
-  m_PrefabInstance: {fileID: 1074854884}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1061324032
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -24430,67 +24430,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1070311523}
   m_Mesh: {fileID: 6820769854693677613, guid: bb8493faf3c5651428c1f678a1d5c0bb, type: 3}
---- !u!1001 &1074854884
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 1486252549}
-    m_Modifications:
-    - target: {fileID: 544974533250406124, guid: 28aa6cbcc945c864ea4e77108c3f42ce, type: 3}
-      propertyPath: coinFX
-      value: 
-      objectReference: {fileID: 1463263051}
-    - target: {fileID: 5408041618137777736, guid: 28aa6cbcc945c864ea4e77108c3f42ce, type: 3}
-      propertyPath: m_Name
-      value: Coin (1)
-      objectReference: {fileID: 0}
-    - target: {fileID: 9156409347015619297, guid: 28aa6cbcc945c864ea4e77108c3f42ce, type: 3}
-      propertyPath: m_RootOrder
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 9156409347015619297, guid: 28aa6cbcc945c864ea4e77108c3f42ce, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 2.2649078
-      objectReference: {fileID: 0}
-    - target: {fileID: 9156409347015619297, guid: 28aa6cbcc945c864ea4e77108c3f42ce, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 1.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 9156409347015619297, guid: 28aa6cbcc945c864ea4e77108c3f42ce, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 1.997345
-      objectReference: {fileID: 0}
-    - target: {fileID: 9156409347015619297, guid: 28aa6cbcc945c864ea4e77108c3f42ce, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.7071068
-      objectReference: {fileID: 0}
-    - target: {fileID: 9156409347015619297, guid: 28aa6cbcc945c864ea4e77108c3f42ce, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 9156409347015619297, guid: 28aa6cbcc945c864ea4e77108c3f42ce, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0.7071068
-      objectReference: {fileID: 0}
-    - target: {fileID: 9156409347015619297, guid: 28aa6cbcc945c864ea4e77108c3f42ce, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 9156409347015619297, guid: 28aa6cbcc945c864ea4e77108c3f42ce, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 9156409347015619297, guid: 28aa6cbcc945c864ea4e77108c3f42ce, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 90
-      objectReference: {fileID: 0}
-    - target: {fileID: 9156409347015619297, guid: 28aa6cbcc945c864ea4e77108c3f42ce, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 28aa6cbcc945c864ea4e77108c3f42ce, type: 3}
 --- !u!1 &1079127782
 GameObject:
   m_ObjectHideFlags: 0
@@ -25282,7 +25221,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9156409347015619297, guid: 28aa6cbcc945c864ea4e77108c3f42ce, type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 9156409347015619297, guid: 28aa6cbcc945c864ea4e77108c3f42ce, type: 3}
       propertyPath: m_LocalPosition.x
@@ -26835,7 +26774,7 @@ GameObject:
   - component: {fileID: 1200527685}
   - component: {fileID: 1200527684}
   m_Layer: 0
-  m_Name: BoxDestroyFX
+  m_Name: BoxDestroySFX
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -33701,6 +33640,133 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: b270c3a958eca6f408ae336dd6af517f, type: 3}
   m_PrefabInstance: {fileID: 1380949015}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1383775786
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1383775787}
+  - component: {fileID: 1383775788}
+  m_Layer: 0
+  m_Name: MultipleCoinCollectSFX
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1383775787
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1383775786}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 339414952}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!82 &1383775788
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1383775786}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: -6659012043922484329, guid: 698467a49df7b0745af0213712e0bbd5, type: 2}
+  m_audioClip: {fileID: 8300000, guid: bb00582aa4c9ae24f81c141624419921, type: 3}
+  m_PlayOnAwake: 0
+  m_Volume: 0.6
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1001 &1384121677
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -35186,7 +35252,7 @@ GameObject:
   - component: {fileID: 1463263052}
   - component: {fileID: 1463263051}
   m_Layer: 0
-  m_Name: CoinCollectFX
+  m_Name: CoinCollectSFX
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -35204,7 +35270,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: -6659012043922484329, guid: 698467a49df7b0745af0213712e0bbd5, type: 2}
   m_audioClip: {fileID: 8300000, guid: 28c8ed4fab6ceb14588c5723669ab784, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.6
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -35770,7 +35836,6 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 1060161884}
   - {fileID: 752009266}
   - {fileID: 72958023}
   - {fileID: 1311440026}
@@ -36206,7 +36271,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9156409347015619297, guid: 28aa6cbcc945c864ea4e77108c3f42ce, type: 3}
       propertyPath: m_RootOrder
-      value: 6
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 9156409347015619297, guid: 28aa6cbcc945c864ea4e77108c3f42ce, type: 3}
       propertyPath: m_LocalPosition.x
@@ -36373,7 +36438,7 @@ AudioSource:
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
-  Priority: 128
+  Priority: 256
   DopplerLevel: 1
   MinDistance: 1
   MaxDistance: 500
@@ -37379,7 +37444,7 @@ GameObject:
   - component: {fileID: 1705949670}
   - component: {fileID: 1705949671}
   m_Layer: 0
-  m_Name: VictoryFX
+  m_Name: VictorySFX
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -45374,7 +45439,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9156409347015619297, guid: 28aa6cbcc945c864ea4e77108c3f42ce, type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9156409347015619297, guid: 28aa6cbcc945c864ea4e77108c3f42ce, type: 3}
       propertyPath: m_LocalPosition.x
@@ -50496,6 +50561,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 870284396}
     m_Modifications:
+    - target: {fileID: 5996165210052975105, guid: e5a42c83f5014dd44bc4eb54aa1eee8b, type: 3}
+      propertyPath: coin
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 5996165210052975105, guid: e5a42c83f5014dd44bc4eb54aa1eee8b, type: 3}
+      propertyPath: coinPrefab
+      value: 
+      objectReference: {fileID: 7824397304325609546, guid: 7163e7517b02dfe4d9c8c6b965074687, type: 3}
     - target: {fileID: 5996165210052975105, guid: e5a42c83f5014dd44bc4eb54aa1eee8b, type: 3}
       propertyPath: boxDestroyFX
       value: 

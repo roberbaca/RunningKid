@@ -6,26 +6,26 @@ using TMPro;
 
 public class GameManager : MonoBehaviour
 {
-
-    //private const int COIN_SCORE_AMOUNT = 5;
+    
     public static GameManager Instance { set; get; }
 
-    public bool isGameStarted = false; // bandera para saber si el nivel comenzo
-    public bool isDead = false;
-    public bool isGamePaused = false;
+    public bool isGameStarted = false;          // bandera para saber si el nivel comenzo
+    public bool isDead = false;                 // bandera para saber si el personaje colisiono con un obstaculo
+    public bool isGamePaused = false;           // bandera para saber si el juego esta en pausa
+    public TextMeshProUGUI sectionCountText;    // para debug (conteo de las secciones generadas)
     private PlayerController controller;
 
     // SFX
-    public AudioSource clickFX;
-
+    public AudioSource clickSFX;
+    public AudioSource coinSFX;
+    public AudioSource multipleCoinsSFX;
 
     // MUsic
     public AudioSource music;
 
     // HUD
     public Animator gameCanvas, coinAnim;         
-    private int coinScore;
-    public TextMeshProUGUI sectionCountText;
+    private int coinScore;    
     public GameObject HUDMenu;
 
     // Main Menu
@@ -67,9 +67,7 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-        Instance = this;
-
-        //UpdateScores();
+        Instance = this;       
 
         controller = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
     
@@ -77,20 +75,16 @@ public class GameManager : MonoBehaviour
         levelCompletedMenu.SetActive(false);
         credits.SetActive(false);
         settings.SetActive(false);
-
-
     }
 
     // Start is called before the first frame update
     void Start()
-    {
-       
+    {       
         pauseMenu.SetActive(false);
-        gameOverMenu.SetActive(false);        
-        
+        gameOverMenu.SetActive(false);                
     }
 
-    // Update is called once per frame
+    
     void Update()
     {
 
@@ -132,19 +126,40 @@ public class GameManager : MonoBehaviour
     }
  
 
-    public void GetCoin()
+    public void GetCoin(int quantityOfCoins)
     {
-        coinAnim.SetTrigger("Collect");
-        coinScore ++;
-        coinText.text = coinScore.ToString("0");
-
-        //scoreText.text = score.ToString("0");
+        if(quantityOfCoins == 1)
+        {
+            coinAnim.SetTrigger("Collect");
+            coinSFX.Play();
+            coinScore += quantityOfCoins;
+            coinText.text = coinScore.ToString("0");
+        }
+        else
+        {
+            coinAnim.SetTrigger("Multiple");
+            multipleCoinsSFX.Play();
+            StartCoroutine(MultipleCoinScore());
+        }                   
     }
+
+
+    private IEnumerator MultipleCoinScore()
+    {     
+        for (int i = 0; i < 3; i++)
+        {
+            coinScore++;
+            coinText.text = coinScore.ToString("0");
+            yield return new WaitForSeconds(0.3f);
+        }
+
+    }
+
 
     public void OnPlayButton()
     {
         music.Stop();
-        clickFX.Play();
+        clickSFX.Play();
         UnityEngine.SceneManagement.SceneManager.LoadScene("Game");
         
     }
@@ -184,7 +199,7 @@ public class GameManager : MonoBehaviour
 
         isGamePaused = true;
         pauseButton.SetActive(false);
-        clickFX.Play();
+        clickSFX.Play();
         pauseMenu.SetActive(true);
         pauseMenuAnim.SetTrigger("Pause");
         Time.timeScale = 0;   
@@ -195,7 +210,7 @@ public class GameManager : MonoBehaviour
     public void OnResumeGame()
     {
         isGamePaused = false;
-        clickFX.Play();
+        clickSFX.Play();
         pauseMenuAnim.SetTrigger("Resume");
         Time.timeScale = 1 ;
         pauseButton.SetActive(true);
@@ -211,9 +226,6 @@ public class GameManager : MonoBehaviour
 
     public void OnLevelCompleted()
     {
-
-        //music.volume = 0.1f;
-
         music.Stop();
         victoryFX.Play();      
 
@@ -238,14 +250,14 @@ public class GameManager : MonoBehaviour
 
     public void CloseApp()
     {
-        clickFX.Play();
+        clickSFX.Play();
         Debug.Log("closing app");
         Application.Quit();
     }
 
     public void OnStartGame()
     {
-        clickFX.Play();
+        clickSFX.Play();
         isGameStarted = true;
         controller.StartRunning();
         FindObjectOfType<CameraController>().isMoving = true;
@@ -255,7 +267,7 @@ public class GameManager : MonoBehaviour
 
     public void ShowCredits()
     {
-        clickFX.Play();
+        clickSFX.Play();
         credits.SetActive(true);      
         mainMenuAnim.SetTrigger("Hide");
         creditsAnim.SetTrigger("showCredits");        
@@ -263,16 +275,15 @@ public class GameManager : MonoBehaviour
 
     public void HideCredits()
     {
-        clickFX.Play();
+        clickSFX.Play();
         creditsAnim.SetTrigger("hideCredits");
         ShowMainMenu();
     }
 
 
-
     public void ShowSettings()
     {
-        clickFX.Play();
+        clickSFX.Play();
         settings.SetActive(true);     
         mainMenuAnim.SetTrigger("Hide");
         settingsAnim.SetTrigger("showSettings");
@@ -280,7 +291,7 @@ public class GameManager : MonoBehaviour
 
     public void HideSettings()
     {
-        clickFX.Play();
+        clickSFX.Play();
         settingsAnim.SetTrigger("hideSettings");
         ShowMainMenu();
     }
