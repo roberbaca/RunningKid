@@ -65,6 +65,10 @@ public class GameManager : MonoBehaviour
     public GameObject sky;
     public float dayNightCycleSpeed = 0.1f;
 
+    // particles
+    public GameObject confetiParticles;
+
+
     private void Awake()
     {
         Instance = this;       
@@ -226,6 +230,9 @@ public class GameManager : MonoBehaviour
 
     public void OnLevelCompleted()
     {
+
+        confetiParticles.GetComponentInChildren<ParticleSystem>().Play(); // VER SI LO SACO
+
         music.Stop();
         victoryFX.Play();      
 

@@ -72,25 +72,38 @@ public class CurveController : MonoBehaviour
         Shader.SetGlobalFloat(bendFalloffId, falloff);
     }
 
+
+
+
     public void curvedLeft()
     {
+        // giramos el mundo a la izquierda
         if (x >= -25f)
         {
             x -= 5f * Time.deltaTime;
-        }
-        
-        //x = Mathf.Lerp(x, -10f, 0.1f);
+        }        
     }
 
     public void curvedRight()
     {
+        // giramos el mundo a la derecha
         if (x <= 25f)
         {
             x += 5f * Time.deltaTime;
-        }
-       
-
-        //x = Mathf.Lerp(x, 10f, 0.1f);
+        }        
     }
 
+    public void curvedStraight()
+    {
+        // giramos al mundo nuevamente al centro
+        if (x <= 26f && x >= 0.5f)
+        {
+            x -= 5f * Time.deltaTime;
+        }
+
+        else if (x <= -0.5f && x >= -26f)
+        {
+            x += 5f * Time.deltaTime;
+        }        
+    }
 }

@@ -18,6 +18,8 @@ public class LevelManager : MonoBehaviour
     public GameObject endSection;                                      // ultima seccion del nivel
 
     public CurveController curved;
+    public bool diceRolled = false;
+    private int dice = 0;
 
     void Start()
     {
@@ -59,15 +61,33 @@ public class LevelManager : MonoBehaviour
         }
 
 
-        // en forma aleatoria genero curvas a la izquierda y derecha
-        if (sectionCount > 1 && sectionCount < 3)
+        // giramos el mundo a la izquierda o derecha en forma aletatoria
+        if (GameManager.Instance.isGameStarted)
         {
-            curved.curvedLeft();
-        }
+            switch (dice)
+            {
+                case 0:
+                    curved.curvedStraight();
+                    break;
+                case -1:
+                    curved.curvedLeft();
+                    break;
+                case 1:
+                    curved.curvedRight();
+                    break;              
+            }
 
-        if (sectionCount > 3 )
-        {
-            curved.curvedRight();
+            // cada 4 secciones giramos el mundo
+            if (sectionCount % 4 == 0 && sectionCount > 3)
+            {
+                rollDice();
+                
+            }
+
+            if (sectionCount % 4 != 0)
+            {
+                diceRolled = false;
+            }
         }
     }
 
@@ -96,5 +116,20 @@ public class LevelManager : MonoBehaviour
         GameManager.Instance.sectionCountText.text = sectionCount.ToString("0");    // para debug
     }
 
+    public void rollDice()
+    {
+        // obtenemos un numero random entero entre -1 y 1        
+        if (!diceRolled)
+        {
+            dice = Random.Range(-1, 2);
 
+            // para debug...
+            if (dice == 0)
+            {
+                Debug.Log("Dice = " + dice);
+            }
+            
+            diceRolled = true;
+        }              
+    }
 }
