@@ -31,7 +31,6 @@ using System.Collections;
 [ExecuteInEditMode]
 public class CurveController : MonoBehaviour
 {
-
     public static CurveController Instance { set; get; }
 
     public Transform CurveOrigin;
@@ -77,8 +76,8 @@ public class CurveController : MonoBehaviour
 
     public void curvedLeft()
     {
-        // giramos el mundo a la izquierda
-        if (x >= -25f)
+        // doblamos el mundo a la izquierda
+        if (x >= -20f)
         {
             x -= 5f * Time.deltaTime;
         }        
@@ -86,8 +85,8 @@ public class CurveController : MonoBehaviour
 
     public void curvedRight()
     {
-        // giramos el mundo a la derecha
-        if (x <= 25f)
+        // doblamos el mundo a la derecha
+        if (x <= 20f)
         {
             x += 5f * Time.deltaTime;
         }        
@@ -95,13 +94,13 @@ public class CurveController : MonoBehaviour
 
     public void curvedStraight()
     {
-        // giramos al mundo nuevamente al centro
-        if (x <= 26f && x >= 0.5f)
+        // doblamos al mundo nuevamente al centro
+        if (x <= 21f && x >= 0.5f)
         {
             x -= 5f * Time.deltaTime;
         }
 
-        else if (x <= -0.5f && x >= -26f)
+        else if (x <= -0.5f && x >= -21f)
         {
             x += 5f * Time.deltaTime;
         }        

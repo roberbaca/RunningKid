@@ -13,6 +13,7 @@ public class Coin : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
+        // chequeamos colision con el jugador...
         if (other.tag == "Player")
         {          
             GameManager.Instance.GetCoin(1);

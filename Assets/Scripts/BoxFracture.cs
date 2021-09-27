@@ -11,14 +11,15 @@ public class BoxFracture : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
 
-        // Chequeamos colicion con el jugador, si esta en la animacion "spinning", entonces destruimos la caja
+        // Chequeamos colicion con el jugador... 
         if (other.gameObject.name == "Player")
-        {          
-
+        {
+            //si esta en la animacion "spinning", entonces destruimos la caja
             if (other.GetComponent<PlayerController>().isSpinning)
             {                
                 explode();                
             }
+            // de lo contrario, vamos a la pantalla de Game Over
             else
             {
                 other.GetComponent<PlayerController>().Crash();
@@ -28,8 +29,9 @@ public class BoxFracture : MonoBehaviour
 
 
     public void explode()
-    {     
-        GameManager.Instance.GetCoin(3);                                            // obtenemos 3 monedas por destruir la caja
+    {
+        //GameManager.Instance.GetCoin(3);                                            // obtenemos 3 monedas por destruir la caja
+        GameManager.Instance.GetBoxScore();
         boxDestroyFX.Play();                                                        
         Instantiate(fracturedCrate, transform.position, transform.rotation);        // instanciamos el objeto que contiene la animacion de destruccion
         Destroy(this.gameObject);

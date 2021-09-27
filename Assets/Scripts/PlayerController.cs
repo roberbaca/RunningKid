@@ -98,7 +98,7 @@ public class PlayerController : MonoBehaviour
         }
 
         
-
+        // chequeamos si el personaje esta en el suelo...
         IsGrounded();
         anim.SetBool("IsGrounded", isGrounded);
 
@@ -106,23 +106,19 @@ public class PlayerController : MonoBehaviour
         direction = Vector3.zero;     
         direction.x = (targetPosition - transform.position).x * speed;
 
-        // chequeamos si el personaje esta en el suelo
+        // si el personaje esta en el suelo...
         if (isGrounded && !GameManager.Instance.isGamePaused)
         {
             verticalVelocity = -0.1f; // para mantenerno pegados al suelo todo el tiempo
         
             // Controles por teclado
             if (Input.GetKeyDown(KeyCode.Space)) // jump
-            {
-                //jumpSFX.Play();
-                //anim.SetTrigger("Jump");
-                //verticalVelocity = jumpForce; 
+            {            
                 Jump();
             }
 
             else if (Input.GetKeyDown(KeyCode.LeftControl)) // slide
-            {
-                
+            {                
                 StartSliding(); 
                 Invoke("StopSliding", 1f);
             }
@@ -135,25 +131,25 @@ public class PlayerController : MonoBehaviour
 
          
             //controles tactiles
-            if (MobileInput.Instance.SwipeUp)
+            if (MobileInput.Instance.SwipeUp) // jump
             {
                 Jump();
             }
 
-            else if (MobileInput.Instance.SwipeDown)
+            else if (MobileInput.Instance.SwipeDown) // slide
             {               
-                StartSliding(); // slide
+                StartSliding(); 
                 Invoke("StopSliding", 1f);
             }
 
-            else if (MobileInput.Instance.DoubleTap)
+            else if (MobileInput.Instance.DoubleTap) // spin
             {
                 StartSpinning();
                 Invoke("StopSpinning", 1f);
             }
 
         }
-        else // si no estamos en el suelo...
+        else // si no estamos en el suelo entonces aplicamos gravedad en el eje vertical
         {
             verticalVelocity -= (gravity * Time.deltaTime);
         }
@@ -167,8 +163,7 @@ public class PlayerController : MonoBehaviour
         dir = controller.velocity; 
        
 
-
-        // Rotacion del personaje en el sentido de movimiento. Para atacar y romper cajas...
+        
         if (!isSpinning)
         {
             if (dir != Vector3.zero)
@@ -227,8 +222,7 @@ public class PlayerController : MonoBehaviour
 
         isGrounded = Physics.Raycast(groundRay, 0.3f);        
 
-        return isGrounded;             
-        
+        return isGrounded;                     
     }
 
     public void Jump()

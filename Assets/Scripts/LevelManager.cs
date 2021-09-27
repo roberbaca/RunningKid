@@ -18,8 +18,8 @@ public class LevelManager : MonoBehaviour
     public GameObject endSection;                                      // ultima seccion del nivel
 
     public CurveController curved;
-    public bool diceRolled = false;
-    private int dice = 0;
+    public bool diceRolled = false;                                    // bandera
+    private int dice = 0;                                              // numero aleatorio
 
     void Start()
     {
@@ -61,7 +61,7 @@ public class LevelManager : MonoBehaviour
         }
 
 
-        // giramos el mundo a la izquierda o derecha en forma aletatoria
+        // doblamos el mundo a la izquierda o derecha en forma aletatoria
         if (GameManager.Instance.isGameStarted)
         {
             switch (dice)
@@ -77,7 +77,7 @@ public class LevelManager : MonoBehaviour
                     break;              
             }
 
-            // cada 4 secciones giramos el mundo
+            // cada 4 secciones doblamos el mundo
             if (sectionCount % 4 == 0 && sectionCount > 3)
             {
                 rollDice();

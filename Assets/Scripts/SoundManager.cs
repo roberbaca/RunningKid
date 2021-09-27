@@ -107,13 +107,13 @@ public class SoundManager : MonoBehaviour
 
     // funciones para guardar las preferencias del jugador
     private void LoadMusicPref()
-    {
-        // if muted = 1 => muted = true. Else if muted = 0 => muted = false    
+    {       
         mutedMusic = PlayerPrefs.GetInt("mutedMusic") == 1;
     }
 
     private void SaveMusicPref()
-    {  
+    {
+        // if muted = 1 => muted = true. Else if muted = 0 => muted = false    
         PlayerPrefs.SetInt("mutedMusic", mutedMusic ? 1 : 0);     
     }
 
