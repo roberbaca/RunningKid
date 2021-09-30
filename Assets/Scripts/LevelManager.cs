@@ -18,23 +18,26 @@ public class LevelManager : MonoBehaviour
     public GameObject endSection;                                      // ultima seccion del nivel
 
     public CurveController curved;
-    public bool diceRolled = false;                                    // bandera
+    private bool diceRolled = false;                                    // bandera
     private int dice = 0;                                              // numero aleatorio
 
     void Start()
     {
+        // al iniciar el juego, creamos las primeras secciones visibles
         for(int i = 0; i < numberOfVisibleSections; i++)
         {
             SpawnSection(Random.Range(0, sectionPrefabs.Length));
             sectionCount = 0;
         }
        
+        // el slider en la parte inferior de la pantalla sirve para indicar cuanto falta para llegar al final del nivel
        slider.maxValue = (maxNumberSections + 1) * sectionLenght;                
     }
 
     
     void Update()
     {
+        // creamos secciones nuevas de acuerdo a la posicion del jugador
         if ((playerTransform.position.z - safeZone) > (zSpawn - numberOfVisibleSections * sectionLenght))
         {
             if (sectionCount < (maxNumberSections - numberOfVisibleSections))
@@ -62,7 +65,7 @@ public class LevelManager : MonoBehaviour
 
 
         // doblamos el mundo a la izquierda o derecha en forma aletatoria
-        if (GameManager.Instance.isGameStarted)
+        if (GameManager.Instance.isGameStarted && !GameManager.Instance.isDead && !GameManager.Instance.isGamePaused)
         {
             switch (dice)
             {
@@ -95,7 +98,7 @@ public class LevelManager : MonoBehaviour
     {
         GameObject newSection = Instantiate(sectionPrefabs[index], transform.forward * zSpawn, transform.rotation);
         activeSections.Add(newSection); // agregamos un nuevo item al array de secciones
-        zSpawn += sectionLenght;
+        zSpawn += sectionLenght;        // posicionamos la nueva seccion a continuacion de la anterior
         sectionCount++;        
         GameManager.Instance.sectionCountText.text = sectionCount.ToString("0");    // para debug
         Debug.Log(sectionCount);
@@ -109,11 +112,11 @@ public class LevelManager : MonoBehaviour
 
     public void SpawnEndSection()
     {
+        // creamos la seccion que tiene la linea de llegada
         GameObject newSection = Instantiate(endSection, transform.forward * zSpawn, transform.rotation);
-        activeSections.Add(newSection); // agregamos un nuevo item al array de secciones
+        activeSections.Add(newSection); 
         zSpawn += sectionLenght;
-        sectionCount++;
-        GameManager.Instance.sectionCountText.text = sectionCount.ToString("0");    // para debug
+        sectionCount++;     
     }
 
     public void rollDice()

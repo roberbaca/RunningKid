@@ -16,8 +16,8 @@ public class Coin : MonoBehaviour
         // chequeamos colision con el jugador...
         if (other.tag == "Player")
         {          
-            GameManager.Instance.GetCoin(1);
-            anim.SetTrigger("Collected");
+            GameManager.Instance.GetCoin(1); // aumentamos en 1 la puntuacion del juego
+            anim.SetTrigger("Collected");   
             Destroy(gameObject, 1.2f);        
         }        
     }

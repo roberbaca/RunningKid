@@ -13,20 +13,19 @@ public class PlayerController : MonoBehaviour
     private bool isGrounded = true;         // bandera para saber si player esta en el piso
     
     // Movimiento
-    private Vector3 direction;
-    private Vector3 targetPosition;
-    private Vector3 dir;
+    private Vector3 direction;               // vector de movimiento
+    private Vector3 targetPosition;          // posicion deseada  
     public float jumpForce = 4f;             // fuerza del salto
     public float speed = 7f;                 // velocidad de movimiento
-    public float turnSpeed = 0.05f;          // velocidad de rotacion del player cuando se mueve entre lineas
+    public float turnSpeed = 5f;             // velocidad de rotacion del jugador cuando se mueve entre lineas
 
 
     public float gravity = 12f;              // graveded
     private float verticalVelocity;          // velocidad de caida
-    private int lane = 1;                    // linea en la que se encuentra el player (0 = izquierda, 1 = centro, 2 = derecha)
+    private int lane = 1;                    // linea en la que se encuentra el jugador (0 = izquierda, 1 = centro, 2 = derecha)
     private const float laneDistance = 2f;   // ancho de cada linea por la que el personaje puede correr
 
-    private Vector3 rotation;
+    //private Vector3 rotation;
 
 
     // Sound SFX
@@ -49,100 +48,70 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
-
-        if(isGrounded) // solo nos podemos mover de carril si estamos en el piso
-        {  
-            // Input por teclado
-            if (Input.GetKeyDown(KeyCode.LeftArrow))
-            {
-                MoveLane(false);
-            }
-
-            if (Input.GetKeyDown(KeyCode.RightArrow))
-            {
-                MoveLane(true);
-            }
-
-
-            // Controles tactiles:
-            if (MobileInput.Instance.SwipeLeft)
-            {
-          
-                MoveLane(false);
-            }
-
-            if (MobileInput.Instance.SwipeRight)
-            {
-              
-                MoveLane(true);
-            }
-
-        }
-    
-
-
-        // definimos el target en funcion de la posicion actual
-        targetPosition = transform.position.z * Vector3.forward;
-
-        if (lane == 0) // si deseamos mover el player a la izquierda...
-        {
-            targetPosition += Vector3.left * laneDistance;
-        }
-        else if (lane == 2)  // si deseamos mover el player a la derecha...
-        {
-            targetPosition += Vector3.right * laneDistance;
-        }
-        else
-        {
-            // estamos en la linea del medio
-        }
-
-        
         // chequeamos si el personaje esta en el suelo...
         IsGrounded();
         anim.SetBool("IsGrounded", isGrounded);
 
-        // calculo del vector de movimiento
-        direction = Vector3.zero;     
-        direction.x = (targetPosition - transform.position).x * speed;
-
-        // si el personaje esta en el suelo...
         if (isGrounded && !GameManager.Instance.isGamePaused)
         {
-            verticalVelocity = -0.1f; // para mantenerno pegados al suelo todo el tiempo
-        
-            // Controles por teclado
-            if (Input.GetKeyDown(KeyCode.Space)) // jump
-            {            
+
+            verticalVelocity = -0.1f; // para mantenernos pegados al suelo todo el tiempo
+
+            // Input por teclado
+            if (Input.GetKeyDown(KeyCode.LeftArrow)) // izquierda
+            {
+                MoveLane(false);
+            }
+
+            if (Input.GetKeyDown(KeyCode.RightArrow)) // derecha
+            {
+                MoveLane(true);
+            }             
+
+           
+            if (Input.GetKeyDown(KeyCode.Space)) // saltar
+            {
                 Jump();
             }
 
-            else if (Input.GetKeyDown(KeyCode.LeftControl)) // slide
-            {                
-                StartSliding(); 
+            if (Input.GetKeyDown(KeyCode.LeftControl)) // deslizar
+            {
+                StartSliding();
                 Invoke("StopSliding", 1f);
             }
 
-            else if (Input.GetKeyDown(KeyCode.G)) // spin
+            if (Input.GetKeyDown(KeyCode.D)) // girar
             {
-                StartSpinning(); 
+                StartSpinning();
                 Invoke("StopSpinning", 1f);
             }
 
-         
-            //controles tactiles
-            if (MobileInput.Instance.SwipeUp) // jump
+
+            //controles tactiles        
+            if (MobileInput.Instance.SwipeLeft) // izquierda
+            {
+
+                MoveLane(false);
+            }
+
+            if (MobileInput.Instance.SwipeRight) // derecha
+            {
+
+                MoveLane(true);
+            }
+
+            if (MobileInput.Instance.SwipeUp) // saltar
             {
                 Jump();
             }
 
-            else if (MobileInput.Instance.SwipeDown) // slide
-            {               
-                StartSliding(); 
+            if (MobileInput.Instance.SwipeDown) // deslizar
+            {
+                StartSliding();
                 Invoke("StopSliding", 1f);
             }
 
-            else if (MobileInput.Instance.DoubleTap) // spin
+            if (MobileInput.Instance.DoubleTap) // girar
             {
                 StartSpinning();
                 Invoke("StopSpinning", 1f);
@@ -154,30 +123,48 @@ public class PlayerController : MonoBehaviour
             verticalVelocity -= (gravity * Time.deltaTime);
         }
 
-        // aplicamos gravedad
+              
+
+        // calculamos la posicion deseada en funcion de la posicion actual
+        targetPosition = transform.position.z * Vector3.forward;
+
+
+        switch (lane)
+        {
+            case 0: // si deseamos mover el player a la izquierda...
+                targetPosition += Vector3.left * laneDistance;
+                break;
+
+            case 2:// si deseamos mover el player a la derecha...
+                targetPosition += Vector3.right * laneDistance;
+                break;
+        }    
+
+
+        // calculo del vector de movimiento (direction)
+        direction = Vector3.zero;     
+
+        // en el eje X
+        direction.x = (targetPosition - transform.position).x * speed;        
+
+        // en el eje Y
         direction.y = verticalVelocity; 
+
+        // en el eje Z
         direction.z = speed;      
 
         // movimiento del personaje
         controller.Move(direction * Time.deltaTime);
-        dir = controller.velocity; 
-       
 
-        
-        if (!isSpinning)
+
+
+        Vector3 vel = controller.velocity;
+
+        if (vel != Vector3.zero) // si estamos en movimiento
         {
-            if (dir != Vector3.zero)
-            {
-                //Vector3 NextDir = new Vector3(-1f, 0, 0);
-
-                dir.y = 0;
-                transform.forward = Vector3.Lerp(transform.forward, dir, turnSpeed);
-
-                //transform.rotation = Quaternion.LookRotation(NextDir);
-
-            }
+            vel.y = 0f;
+            transform.forward = Vector3.Lerp(transform.forward, vel, turnSpeed);
         }
-
      
     }
 
@@ -208,7 +195,7 @@ public class PlayerController : MonoBehaviour
 
         lane += (goingRight) ? 1 : -1;
 
-        lane = Mathf.Clamp(lane, 0, 2);
+        lane = Mathf.Clamp(lane, 0, 2); // para asegurarnos que devuelva un numero entre 0 y 2
     }
 
   
@@ -280,7 +267,7 @@ public class PlayerController : MonoBehaviour
 
     public void Crash()
     {
-        // player dies        
+        // el jugador colisiono contra algun obstaculo y nos muestra el Game Over screen
         woahSFX.Play();
         anim.SetTrigger("Death");
         controller.height = 0;
@@ -292,6 +279,7 @@ public class PlayerController : MonoBehaviour
 
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {    
+        // chequeo de colisiones
         switch (hit.gameObject.tag)
         {
             case "Obstacle":

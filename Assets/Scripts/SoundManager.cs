@@ -47,7 +47,7 @@ public class SoundManager : MonoBehaviour
             }
             else
             {
-                //music.Stop();
+                //
             }
             
         }

@@ -49,8 +49,6 @@ public class GameManager : MonoBehaviour
     public Animator levelCompletedAnim;
     public GameObject levelCompletedMenu;
     public AudioSource victoryFX;  
-    //public GameObject levelFinished;
-    //public Animator levelFinishedAnim;
 
     // credits  
     public GameObject credits;
@@ -84,7 +82,6 @@ public class GameManager : MonoBehaviour
         settings.SetActive(false);
     }
 
-    // Start is called before the first frame update
     void Start()
     {       
         pauseMenu.SetActive(false);
@@ -93,26 +90,7 @@ public class GameManager : MonoBehaviour
 
     
     void Update()
-    {
-
-        // controles tactiles
-        if(MobileInput.Instance.Tap && !isGameStarted)
-        {
-            //isGameStarted = true;
-            //controller.StartRunning();
-            //FindObjectOfType<CameraController>().isMoving = true;         
-            //mainMenuAnim.SetTrigger("Hide");
-            //HUDMenu.SetActive(true);            
-        }
-
-        if(Input.anyKey && !isGameStarted)
-        {
-            //isGameStarted = true;
-            //controller.StartRunning();
-            //FindObjectOfType<CameraController>().isMoving = true;          
-            //mainMenuAnim.SetTrigger("Hide");
-            //HUDMenu.SetActive(true);
-        }      
+    {        
 
         if(Input.GetKeyDown(KeyCode.P))
         {
@@ -136,37 +114,21 @@ public class GameManager : MonoBehaviour
 
     public void GetCoin(int quantityOfCoins)
     {
+        // puntaje cuando agarramos una moneda
         if(quantityOfCoins == 1)
         {
             coinAnim.SetTrigger("Collect");
             coinSFX.Play();
             coinScore += quantityOfCoins;
             coinText.text = coinScore.ToString("0");
-        }
-        else
-        {
-            //coinAnim.SetTrigger("Multiple");
-            //multipleCoinsSFX.Play();
-            //StartCoroutine(MultipleCoinScore());
-        }                   
+        }                       
     }
 
-    /*
-    private IEnumerator MultipleCoinScore()
-    {     
-        // para obtener multiples monedas...
-        for (int i = 0; i < 3; i++)
-        {
-            coinScore++;
-            coinText.text = coinScore.ToString("0");
-            yield return new WaitForSeconds(0.3f);
-        }
-
-    }
-    */
+   
 
     public void GetBoxScore()
-    {        
+    {
+        // puntaje cuando rompemos una caja de madera
         boxAnim.SetTrigger("BreakBox");
         boxScore ++;
         boxText.text = boxScore.ToString("0");
@@ -178,8 +140,7 @@ public class GameManager : MonoBehaviour
         // cargamos la escena
         music.Stop();
         clickSFX.Play();
-        UnityEngine.SceneManagement.SceneManager.LoadScene("Game");
-        
+        UnityEngine.SceneManagement.SceneManager.LoadScene("Game");        
     }
 
 
@@ -211,7 +172,6 @@ public class GameManager : MonoBehaviour
     public void OnPauseGame()
     {
         // pausamos el juego
-
         if (isDead)
         {
             return;
@@ -230,7 +190,7 @@ public class GameManager : MonoBehaviour
 
     public void OnResumeGame()
     {
-       
+        // despausamos el juego
         isGamePaused = false;
         clickSFX.Play();
         pauseMenuAnim.SetTrigger("Resume");
@@ -242,15 +202,14 @@ public class GameManager : MonoBehaviour
 
 
     /*    
-     ===============
-     Level Finished
-    ===============
+     =======================
+     Level Finished Screen
+    ========================
     */
 
     public void OnLevelCompleted()
     {
-
-        confetiParticles.GetComponentInChildren<ParticleSystem>().Play(); // VER SI LO SACO
+        confetiParticles.GetComponentInChildren<ParticleSystem>().Play();
         HUDMenu.SetActive(false);
         music.Stop();
         victoryFX.Play();      
@@ -268,12 +227,13 @@ public class GameManager : MonoBehaviour
 
     /*    
     ===============
-      Main menu
+        Menu´s
     ===============
     */
 
     public void CloseApp()
     {
+        // para salir del juego
         clickSFX.Play();
         Debug.Log("closing app");
         Application.Quit();
@@ -281,13 +241,13 @@ public class GameManager : MonoBehaviour
 
     public void OnStartGame()
     {        
+        // comienza la partida
         clickSFX.Play();
         HideTutorial();
         tutorial.SetActive(false);
         isGameStarted = true;
         controller.StartRunning();
-        FindObjectOfType<CameraController>().isMoving = true;
-        //mainMenuAnim.SetTrigger("Hide");
+        FindObjectOfType<CameraController>().isMoving = true;   
         HUDMenu.SetActive(true);        
     }
 

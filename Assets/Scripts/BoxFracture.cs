@@ -29,12 +29,11 @@ public class BoxFracture : MonoBehaviour
 
 
     public void explode()
-    {
-        //GameManager.Instance.GetCoin(3);                                            // obtenemos 3 monedas por destruir la caja
-        GameManager.Instance.GetBoxScore();
-        boxDestroyFX.Play();                                                        
+    {   
+        GameManager.Instance.GetBoxScore();                                         // aumentamos la puntuacion
+        boxDestroyFX.Play();                                                        // sonido
         Instantiate(fracturedCrate, transform.position, transform.rotation);        // instanciamos el objeto que contiene la animacion de destruccion
-        Destroy(this.gameObject);
+        Destroy(this.gameObject);                                                   // destruimos este objeto
     }  
 
 }
