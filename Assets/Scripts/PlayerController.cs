@@ -4,35 +4,35 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-
     private CharacterController controller;
     private Animator anim;
 
-    private bool isRunning = false;         // bandera para saber si el nivel comenzo
-    public bool isSpinning = false;         // bandera para saber si player esta atacando
-    private bool isGrounded = true;         // bandera para saber si player esta en el piso
+    private bool isGameStarted = false;      // bandera para saber si el nivel comenzo
+    public bool isSpinning = false;          // bandera para saber si player esta atacando
+    public bool isOnFloor = true;            // bandera para saber si player esta en el piso
     
     // Movimiento
     private Vector3 direction;               // vector de movimiento
     private Vector3 targetPosition;          // posicion deseada  
-    public float jumpForce = 4f;             // fuerza del salto
-    public float speed = 7f;                 // velocidad de movimiento
-    public float turnSpeed = 5f;             // velocidad de rotacion del jugador cuando se mueve entre lineas
-
-
-    public float gravity = 12f;              // graveded
     private float verticalVelocity;          // velocidad de caida
     private int lane = 1;                    // linea en la que se encuentra el jugador (0 = izquierda, 1 = centro, 2 = derecha)
     private const float laneDistance = 2f;   // ancho de cada linea por la que el personaje puede correr
 
-    //private Vector3 rotation;
-
+    [SerializeField] float jumpForce = 4f;   // fuerza del salto
+    [SerializeField] float speed = 7f;       // velocidad de movimiento
+    [SerializeField] float turnSpeed = 5f;   // velocidad de rotacion del jugador cuando se mueve entre lineas
+    [SerializeField] float gravity = 12f;    // graveded
+   
 
     // Sound SFX
-    public AudioSource spinSFX;
-    public AudioSource woahSFX;
-    public AudioSource jumpSFX;
-    public AudioSource whooshSFX;
+    [SerializeField] AudioSource spinSFX;
+    [SerializeField] AudioSource woahSFX;
+    [SerializeField] AudioSource jumpSFX;
+    [SerializeField] AudioSource whooshSFX;
+
+    // isgrounded?
+    [SerializeField] Transform groundCheck;
+    [SerializeField] LayerMask groundLayer;
 
     void Start()
     {
@@ -43,44 +43,42 @@ public class PlayerController : MonoBehaviour
   
     void Update()
     {
-        if(!isRunning)
+        if(!isGameStarted)
         {
             return;
         }
 
-        // chequeamos si el personaje esta en el suelo...
-        IsGrounded();
-        anim.SetBool("IsGrounded", isGrounded);
+       
 
-        if (isGrounded && !GameManager.Instance.isGamePaused)
+        if (isOnFloor && !GameManager.Instance.isGamePaused)
         {
 
             verticalVelocity = -0.1f; // para mantenernos pegados al suelo todo el tiempo
 
             // Input por teclado
-            if (Input.GetKeyDown(KeyCode.LeftArrow)) // izquierda
+            if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A)) // izquierda
             {
                 MoveLane(false);
             }
 
-            if (Input.GetKeyDown(KeyCode.RightArrow)) // derecha
+            else if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D)) // derecha
             {
                 MoveLane(true);
             }             
 
            
-            if (Input.GetKeyDown(KeyCode.Space)) // saltar
+            else if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W)) // saltar
             {
                 Jump();
             }
 
-            if (Input.GetKeyDown(KeyCode.LeftControl)) // deslizar
+            else if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S)) // deslizar
             {
                 StartSliding();
                 Invoke("StopSliding", 1f);
             }
 
-            if (Input.GetKeyDown(KeyCode.D)) // girar
+            else if (Input.GetKeyDown(KeyCode.LeftControl) || Input.GetKeyDown(KeyCode.RightControl)) // girar
             {
                 StartSpinning();
                 Invoke("StopSpinning", 1f);
@@ -122,7 +120,6 @@ public class PlayerController : MonoBehaviour
         {
             verticalVelocity -= (gravity * Time.deltaTime);
         }
-
               
 
         // calculamos la posicion deseada en funcion de la posicion actual
@@ -140,7 +137,6 @@ public class PlayerController : MonoBehaviour
                 break;
         }    
 
-
         // calculo del vector de movimiento (direction)
         direction = Vector3.zero;     
 
@@ -157,7 +153,7 @@ public class PlayerController : MonoBehaviour
         controller.Move(direction * Time.deltaTime);
 
 
-
+        // rotaacion del personaje en el sentido de movimiento
         Vector3 vel = controller.velocity;
 
         if (vel != Vector3.zero) // si estamos en movimiento
@@ -165,15 +161,17 @@ public class PlayerController : MonoBehaviour
             vel.y = 0f;
             transform.forward = Vector3.Lerp(transform.forward, vel, turnSpeed);
         }
-     
+
+        // chequeamos si el personaje esta en el suelo...       
+        GroundCheck();
+        anim.SetBool("IsGrounded", isOnFloor);
+
     }
 
-    private void MoveLane(bool goingRight)
+    private void MoveLane(bool movingRight)
     {
-
-        // si nos movemos a la izquierda...
-        /*
-        if(!goingRight)
+        // si nos movemos a la izquierda...        
+        if(!movingRight)
         {
             lane--;
 
@@ -190,27 +188,20 @@ public class PlayerController : MonoBehaviour
             {
                 lane = 2;
             }
-        }
-        */
-
-        lane += (goingRight) ? 1 : -1;
+        }      
 
         lane = Mathf.Clamp(lane, 0, 2); // para asegurarnos que devuelva un numero entre 0 y 2
     }
-
   
 
-    private bool IsGrounded()
+    private bool GroundCheck()
     {
+        // chequeamos si el personaje esta en el suelo...
+        isOnFloor = Physics.CheckSphere(groundCheck.position, 0.1f, groundLayer);
 
-        // casting a ray
-        Ray groundRay = new Ray(new Vector3(controller.bounds.center.x, controller.bounds.center.y - controller.bounds.extents.y + 0.2f, controller.bounds.center.z), Vector3.down);
-        Debug.DrawRay(groundRay.origin, groundRay.direction, Color.red, 1f);
-
-        isGrounded = Physics.Raycast(groundRay, 0.3f);        
-
-        return isGrounded;                     
+        return isOnFloor;
     }
+
 
     public void Jump()
     {
@@ -221,13 +212,13 @@ public class PlayerController : MonoBehaviour
 
     public void StartRunning()
     {
-        isRunning = true;    
+        isGameStarted = true;    
         anim.SetTrigger("Running");
     }
 
     public void StopRunning()
     {
-        isRunning = false;
+        isGameStarted = false;
         anim.SetTrigger("Victory");
     }
 
@@ -272,7 +263,7 @@ public class PlayerController : MonoBehaviour
         anim.SetTrigger("Death");
         controller.height = 0;
         controller.center = new Vector3(controller.center.x, controller.center.y, controller.center.z);
-        isRunning = false;
+        isGameStarted = false;
         GameManager.Instance.OnGameOver();
     }
   

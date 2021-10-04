@@ -5,8 +5,7 @@ using UnityEngine.UI;
 using TMPro;
 
 public class GameManager : MonoBehaviour
-{
-    
+{    
     public static GameManager Instance { set; get; }
 
     public bool isGameStarted = false;          // bandera para saber si el nivel comenzo
@@ -16,58 +15,54 @@ public class GameManager : MonoBehaviour
     private PlayerController controller;
 
     // SFX
-    public AudioSource clickSFX;
-    public AudioSource coinSFX;
-    public AudioSource multipleCoinsSFX;
+    [SerializeField] AudioSource clickSFX;
+    [SerializeField] AudioSource coinSFX;
+    [SerializeField] AudioSource multipleCoinsSFX;
 
     // MUsic
-    public AudioSource music;
+    [SerializeField] AudioSource music;
 
     // HUD
-    public Animator gameCanvas, coinAnim, boxAnim;         
-    private int coinScore, boxScore;    
-    public GameObject HUDMenu;
+    [SerializeField] Animator gameCanvas, coinAnim, boxAnim;         
+    private int coinScore, boxScore;
+    [SerializeField] GameObject HUDMenu;
 
     // Main Menu
-    public Animator mainMenuAnim;
-    public GameObject mainMenu;
+    [SerializeField] Animator mainMenuAnim;
+    [SerializeField] GameObject mainMenu;
 
     // Game Over
-    public Animator gameOverMenuAnim;
-    public TextMeshProUGUI gameOverCoinText, coinText;
-    public TextMeshProUGUI gameOverBoxText, boxText;
-    public GameObject gameOverMenu;
+    [SerializeField] Animator gameOverMenuAnim;
+    [SerializeField] TextMeshProUGUI gameOverCoinText, coinText;
+    [SerializeField] TextMeshProUGUI gameOverBoxText, boxText;
+    [SerializeField] GameObject gameOverMenu;
 
     // Pause
-    public Animator pauseMenuAnim;
-    public GameObject pauseMenu;
-    public GameObject pauseButton;
+    [SerializeField] Animator pauseMenuAnim;
+    [SerializeField] GameObject pauseMenu;
+    [SerializeField] GameObject pauseButton;
 
     // Level Completed
-    public TextMeshProUGUI levelCompletedCoinText;
-    public TextMeshProUGUI levelCompletedBoxText;
-    public Animator levelCompletedAnim;
-    public GameObject levelCompletedMenu;
-    public AudioSource victoryFX;  
+    [SerializeField] TextMeshProUGUI levelCompletedCoinText;
+    [SerializeField] TextMeshProUGUI levelCompletedBoxText;
+    [SerializeField] Animator levelCompletedAnim;
+    [SerializeField] GameObject levelCompletedMenu;
+    [SerializeField] AudioSource victoryFX;
 
     // credits  
-    public GameObject credits;
-    public Animator creditsAnim;
+    [SerializeField] GameObject credits;
+    [SerializeField] Animator creditsAnim;
 
     // setings
-    public GameObject settings;
-    public Animator settingsAnim;
+    [SerializeField] GameObject settings;
+    [SerializeField] Animator settingsAnim;
 
     // tutorial
-    public GameObject tutorial;
-    public Animator tutorialAnim;
-
-    // Sky
-    public GameObject sky;
-    public float dayNightCycleSpeed = 0.1f;
+    [SerializeField] GameObject tutorial;
+    [SerializeField] Animator tutorialAnim;
 
     // particles
-    public GameObject confetiParticles;
+    [SerializeField] GameObject confetiParticles;
 
 
     private void Awake()
@@ -90,18 +85,11 @@ public class GameManager : MonoBehaviour
 
     
     void Update()
-    {        
-
+    {      
         if(Input.GetKeyDown(KeyCode.P))
         {
             OnPauseGame();
-        }
-
-        // Ciclo dia/noche
-
-        //sky.GetComponent<Renderer>().material.mainTextureOffset = new Vector2(dayNightCycleSpeed * Time.time, 0);
-        //sky.GetComponent<Transform>().Rotate(Vector3.up * Time.deltaTime * 5);
-
+        }  
     }
 
 

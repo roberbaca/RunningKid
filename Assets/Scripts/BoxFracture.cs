@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class BoxFracture : MonoBehaviour
-{
-   
-    public GameObject fracturedCrate;    
-    public AudioSource boxDestroyFX; 
+{   
+    [SerializeField] GameObject fracturedCrate;
+    [SerializeField] AudioSource boxDestroyFX; 
 
     private void OnTriggerEnter(Collider other)
     {

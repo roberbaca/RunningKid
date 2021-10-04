@@ -8,9 +8,7 @@ public class CameraController : MonoBehaviour
 
     public Vector3 offset;
     public Vector3 rotation;
-
     public bool isMoving { set; get; }
-
  
     private void LateUpdate()
     {        
@@ -26,8 +24,6 @@ public class CameraController : MonoBehaviour
 
             transform.position = Vector3.Lerp(transform.position, desiredPosition, Time.deltaTime);         // movemos la camara suavemente siguiendo al personaje
             transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(rotation), 0.1f);     // para rotar la camara cuando arranca el nivel
-        }     
-                
+        }                     
     }
-
 }

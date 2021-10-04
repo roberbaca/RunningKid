@@ -169,9 +169,7 @@ public class MobileInput : MonoBehaviour
 
             startTouch = swipeDelta = Vector2.zero;
         }
-
     }
-
 }
 
 

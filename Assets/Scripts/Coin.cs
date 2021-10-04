@@ -5,7 +5,6 @@ using UnityEngine;
 public class Coin : MonoBehaviour
 {
     private Animator anim;
-
     private void Start()
     {
         anim = GetComponent<Animator>();

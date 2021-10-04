@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1391178419550469673}
   - component: {fileID: 9123844653712440894}
   - component: {fileID: 1687156346756332090}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Ground Tile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -107,6 +107,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tile Top 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3196648517536708714, guid: 3d3e1647da524af438765070d6d4fc6c, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 5114996075067899094, guid: 3d3e1647da524af438765070d6d4fc6c, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -163,7 +167,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: -3281812277924531262, guid: 3d3e1647da524af438765070d6d4fc6c, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 3d3e1647da524af438765070d6d4fc6c, type: 3}
 --- !u!4 &5905661235521323256 stripped
 Transform:

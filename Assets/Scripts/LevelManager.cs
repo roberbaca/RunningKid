@@ -5,21 +5,21 @@ using UnityEngine.UI;
 
 public class LevelManager : MonoBehaviour
 {
-    public GameObject[] sectionPrefabs;                                // array con las secciones
-    public float zSpawn = 100;                                         // posicion de origen de la 1er seccion
-    public float sectionLenght = 100;                                  // largo de cada seccion
-    public int numberOfVisibleSections = 5;                            // cantidad de secciones que se veran en pantalla a la vez
-    public List<GameObject> activeSections = new List<GameObject>();   // creamos una lista con las secciones activas
-    public Transform playerTransform;                                  // para obtener la posicion del personaje
-    public float safeZone = 35;                                        // zona de seguridad (sirve para no destruir la seccion en la que se encuentra el peronaje)
-    private int sectionCount = 0;                                      // conteo de la secciones generadas
-    public int maxNumberSections;                                      // es una medida de la longitud del nivel
-    [SerializeField] Slider slider;                                    // progress bar
-    public GameObject endSection;                                      // ultima seccion del nivel
+    [SerializeField] GameObject[] sectionPrefabs;                                // array con las secciones
+    [SerializeField] float zSpawn = 100;                                         // posicion de origen de la 1er seccion
+    [SerializeField] float sectionLenght = 100;                                  // largo de cada seccion
+    [SerializeField] int numberOfVisibleSections = 5;                            // cantidad de secciones que se veran en pantalla a la vez
+    [SerializeField] List<GameObject> activeSections = new List<GameObject>();   // creamos una lista con las secciones activas
+    [SerializeField] Transform playerTransform;                                  // para obtener la posicion del personaje
+    [SerializeField] float safeZone = 35;                                        // zona de seguridad (sirve para no destruir la seccion en la que se encuentra el peronaje) 
+    [SerializeField] int maxNumberSections;                                      // es una medida de la longitud del nivel
+    [SerializeField] Slider slider;                                              // progress bar
+    [SerializeField] GameObject endSection;                                      // ultima seccion del nivel
 
-    public CurveController curved;
-    private bool diceRolled = false;                                    // bandera
-    private int dice = 0;                                              // numero aleatorio
+    [SerializeField] CurveController curved;
+    private bool diceRolled = false;                                             // bandera
+    private int dice = 0;                                                        // numero aleatorio
+    private int sectionCount = 0;                                                // conteo de la secciones generadas
 
     void Start()
     {

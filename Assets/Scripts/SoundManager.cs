@@ -9,9 +9,9 @@ public class SoundManager : MonoBehaviour
 
     private bool mutedSFX = false;
     private bool mutedMusic = false;
-    public AudioSource[] sfx ;
-    public AudioSource music;
-    public Toggle musicToggle;
+    [SerializeField] AudioSource[] sfx ;
+    [SerializeField] AudioSource music;
+    [SerializeField] Toggle musicToggle;
     
     void Start()
     {
