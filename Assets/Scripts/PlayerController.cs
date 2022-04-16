@@ -48,9 +48,83 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
-       
-
         if (isOnFloor && !GameManager.Instance.isGamePaused)
+        {
+            verticalVelocity = -0.1f; // para mantenernos pegados al suelo todo el tiempo
+
+            if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W)) // saltar
+            {
+                Jump();
+            }
+
+            else if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S)) // deslizar
+            {
+                StartSliding();
+                Invoke("StopSliding", 1f);
+            }
+
+            else if (Input.GetKeyDown(KeyCode.LeftControl) || Input.GetKeyDown(KeyCode.RightControl)) // girar
+            {
+                StartSpinning();
+                Invoke("StopSpinning", 1f);
+            }
+
+            if (MobileInput.Instance.SwipeUp) // saltar
+            {
+                Jump();
+            }
+
+            if (MobileInput.Instance.SwipeDown) // deslizar
+            {
+                StartSliding();
+                Invoke("StopSliding", 1f);
+            }
+
+            if (MobileInput.Instance.DoubleTap) // girar
+            {
+                StartSpinning();
+                Invoke("StopSpinning", 1f);
+            }
+        }
+        else // si no estamos en el suelo entonces aplicamos gravedad en el eje vertical
+        {
+            verticalVelocity -= (gravity * Time.deltaTime);
+        }
+
+
+        if (!GameManager.Instance.isGamePaused)
+        {           
+
+            // Input por teclado
+            if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A)) // izquierda
+            {
+                MoveLane(false);
+            }
+
+            else if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D)) // derecha
+            {
+                MoveLane(true);
+            }        
+
+
+            //controles tactiles        
+            if (MobileInput.Instance.SwipeLeft) // izquierda
+            {
+
+                MoveLane(false);
+            }
+
+            if (MobileInput.Instance.SwipeRight) // derecha
+            {
+
+                MoveLane(true);
+            }      
+
+        }
+    
+
+        /*
+        if (isOnFloor && !GameManager.Instance.isGamePaused)        
         {
 
             verticalVelocity = -0.1f; // para mantenernos pegados al suelo todo el tiempo
@@ -120,7 +194,9 @@ public class PlayerController : MonoBehaviour
         {
             verticalVelocity -= (gravity * Time.deltaTime);
         }
-              
+
+        */
+
 
         // calculamos la posicion deseada en funcion de la posicion actual
         targetPosition = transform.position.z * Vector3.forward;
