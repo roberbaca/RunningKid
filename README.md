@@ -12,6 +12,8 @@ Engine utilizado: Unity 3D
 El objetivo del juego es recoger monedas, mientras nuestro personaje corre a través de plataformas. Los obstáculos deben ser esquivados mediante la realización de saltos oportunos: deslizando hacia arriba, deslizando hacia abajo y movimientos laterales (deslizando a la izquierda o derecha). Las cajas pueden romperse utilizando un movimiento especial.
 
 
+LIVE: https://rober-baca.itch.io/running-kid
+
 
 ![image](https://user-images.githubusercontent.com/83043304/135935707-a1cbb9f9-5185-48fe-aaa7-9bfc9559eb31.png)
 
