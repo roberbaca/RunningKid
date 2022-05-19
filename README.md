@@ -14,6 +14,9 @@ El objetivo del juego es recoger monedas, mientras nuestro personaje corre a tra
 
 LIVE: https://rober-baca.itch.io/running-kid
 
+GOOGLE PLAY STORE: https://play.google.com/store/apps/details?id=com.RNBGames.RunningKid&hl=es_419&gl=US
+
+
 
 ![image](https://user-images.githubusercontent.com/83043304/135935707-a1cbb9f9-5185-48fe-aaa7-9bfc9559eb31.png)
 
